@@ -4,6 +4,7 @@
 #include <QGraphicsScene>
 #include <QElapsedTimer>
 #include <QTimer>
+#include "utils/mapmanager.h"
 #include "utils/global.h"
 
 struct KeyStatus
@@ -42,6 +43,9 @@ private:
     QElapsedTimer m_elapsedTimer;
     float m_deltaTime = 0.0f, m_loopTime = 0.0f;
     const float m_loopSpeed;
+
+    MapManager m_mapManager;
+    int m_x;
     // QGraphicsScene interface
 protected:
     virtual void keyPressEvent(QKeyEvent *event) override;

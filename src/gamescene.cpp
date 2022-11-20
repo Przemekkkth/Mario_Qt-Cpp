@@ -4,8 +4,13 @@
 #include <QDebug>
 
 GameScene::GameScene(QObject *parent)
-    : QGraphicsScene(parent), m_loopSpeed(int(1000.0f/GLOBAL::FPS))
+    : QGraphicsScene(parent), m_loopSpeed(int(1000.0f/GLOBAL::FPS)),
+      m_x(0)
 {
+
+    m_mapManager.updateMapSketch(0);
+    m_mapManager.convertFromSketch(0);
+
     for(int i = 0; i < 256; ++i)
     {
         m_keys[i] = new KeyStatus();
@@ -15,6 +20,7 @@ GameScene::GameScene(QObject *parent)
     connect(&m_timer, &QTimer::timeout, this, &GameScene::loop);
     m_timer.start(int(1000.0f/FPS));
     m_elapsedTimer.start();
+
 }
 
 void GameScene::loop()
@@ -26,7 +32,11 @@ void GameScene::loop()
     if( m_loopTime > m_loopSpeed)
     {
         m_loopTime -= m_loopSpeed;
-
+//draw
+        clear();
+        //qDebug() << "m_x " << m_x;
+        m_mapManager.drawBackground(m_x,*this);
+        setSceneRect(m_x, 0, GLOBAL::SCREEN_SIZE.width(), GLOBAL::SCREEN_SIZE.height());
         handlePlayerInput();
         resetStatus();
     }
@@ -37,6 +47,14 @@ void GameScene::handlePlayerInput()
     if(m_mouse->m_released)
     {
         qDebug() << "m_mouse->m_released " << m_mouse->m_released;
+    }
+    if(m_keys[Qt::Key_A]->m_held)
+    {
+        m_x -= 10;
+    }
+    if(m_keys[Qt::Key_D]->m_held)
+    {
+        m_x += 10;
     }
 }
 

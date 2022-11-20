@@ -1,3 +1,6 @@
 <RCC>
-    <qresource prefix="/"/>
+    <qresource prefix="/">
+        <file>res/map16x16.png</file>
+        <file>res/LevelSketch0.png</file>
+    </qresource>
 </RCC>
