@@ -3,6 +3,7 @@ greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 HEADERS += \
     src/entities/block.h \
     src/entities/entity.h \
+    src/entities/mario.h \
     src/gamescene.h \
     src/utils/animator.h \
     src/utils/global.h \
@@ -12,6 +13,7 @@ HEADERS += \
 SOURCES += \
     src/entities/block.cpp \
     src/entities/entity.cpp \
+    src/entities/mario.cpp \
     src/gamescene.cpp \
     src/main.cpp \
     src/utils/animator.cpp \

@@ -57,8 +57,10 @@ static constexpr const QSize SCREEN_SIZE = QSize(640, 480);
 static constexpr const QSize RESOLUTION_FACTOR = QSize(SCREEN_SIZE.width()/WINDOW_SIZE.width(), SCREEN_SIZE.height()/WINDOW_SIZE.height());
 
 static constexpr const QSize TEXTURE_SIZE = QSize(16,16);
+static constexpr const QSize MARIO_TEXTURE_SIZE = QSize(18,18);
 static constexpr const QSize TILE_SIZE = QSize(TEXTURE_SIZE.width() * RESOLUTION_FACTOR.width(), TEXTURE_SIZE.height() * RESOLUTION_FACTOR.height());
 
+static constexpr const float GRAVITY = 0.2f;
 
 using Map = QVector<std::array<CELL_TYPE, SCREEN_SIZE.height() / TILE_SIZE.height()>>;
 

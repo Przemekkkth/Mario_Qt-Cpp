@@ -3,5 +3,6 @@
         <file>res/map16x16.png</file>
         <file>res/LevelSketch0.png</file>
         <file>res/LevelSketchTest34x45.png</file>
+        <file>res/mario_items_18x18.png</file>
     </qresource>
 </RCC>

@@ -6,7 +6,8 @@
 #include <QTimer>
 #include "utils/mapmanager.h"
 #include "utils/global.h"
-
+//#include "entities/mario.h"
+class Mario;
 struct KeyStatus
 {
     bool m_held = false;
@@ -26,7 +27,7 @@ class GameScene : public QGraphicsScene
     Q_OBJECT
 public:
     explicit GameScene(QObject *parent = nullptr);
-
+    KeyStatus* keys(int keyCode);
 signals:
 
 private slots:
@@ -46,6 +47,7 @@ private:
 
     MapManager m_mapManager;
     int m_x;
+    Mario *m_mario;
     // QGraphicsScene interface
 protected:
     virtual void keyPressEvent(QKeyEvent *event) override;

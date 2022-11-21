@@ -6,6 +6,7 @@ class Entity
 {
 public:
     Entity();
+    ~Entity();
     static QPointF convertMapPointToScreenPoint(int x, int y);
     virtual void draw(GameScene& scene);
     virtual void update(float elapsedTime);

@@ -239,7 +239,6 @@ void MapManager::drawForeground(int cameraX, GameScene &scene)
                         &&
                         int(block->position().y()) == int(b*GLOBAL::TILE_SIZE.height())     )
                 {
-                    qDebug() << "Blocks exists " << GLOBAL::cellTypeToString(block->cellType());
                     block->draw(scene);
                 }
             }

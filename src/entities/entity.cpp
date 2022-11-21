@@ -7,17 +7,22 @@ Entity::Entity()
 
 }
 
+Entity::~Entity()
+{
+
+}
+
 QPointF Entity::convertMapPointToScreenPoint(int x, int y)
 {
 
 }
 
-void Entity::draw(GameScene &scene)
+void Entity::draw(GameScene &)
 {
 
 }
 
-void Entity::update(float elapsedTime)
+void Entity::update(float)
 {
 
 }

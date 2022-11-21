@@ -2,6 +2,7 @@
 #include <QKeyEvent>
 #include <QGraphicsSceneMouseEvent>
 #include <QDebug>
+#include "entities/mario.h"
 
 GameScene::GameScene(QObject *parent)
     : QGraphicsScene(parent), m_loopSpeed(int(1000.0f/GLOBAL::FPS)),
@@ -13,6 +14,7 @@ GameScene::GameScene(QObject *parent)
     //m_mapManager.drawForeground(0, *this);
     //exit(0);
     //m_mapManager.printMap();
+    m_mario = new Mario();
     for(int i = 0; i < 256; ++i)
     {
         m_keys[i] = new KeyStatus();
@@ -25,6 +27,11 @@ GameScene::GameScene(QObject *parent)
 
 }
 
+KeyStatus *GameScene::keys(int keyCode)
+{
+    return m_keys[keyCode];
+}
+
 void GameScene::loop()
 {
     m_deltaTime = m_elapsedTimer.elapsed();
@@ -33,15 +40,21 @@ void GameScene::loop()
     m_loopTime += m_deltaTime;
     if( m_loopTime > m_loopSpeed)
     {
-        m_loopTime -= m_loopSpeed;
+        const float elapsedTime = 1.0f/FPS;
+//input
+        handlePlayerInput();
+        m_mario->update(elapsedTime, *this);
+//update
 //draw
         clear();
         //qDebug() << "m_x " << m_x;
-        m_mapManager.drawBackground(m_x,*this);
-        m_mapManager.drawForeground(m_x, *this);
-        setSceneRect(m_x, 0, GLOBAL::SCREEN_SIZE.width(), GLOBAL::SCREEN_SIZE.height());
-        handlePlayerInput();
+        m_mapManager.drawBackground(0,*this);
+        m_mapManager.drawForeground(0, *this);
+        m_mario->draw(*this);
+        setSceneRect(0, 0, GLOBAL::SCREEN_SIZE.width(), GLOBAL::SCREEN_SIZE.height());
+//reset key/mouse status, reset frame counter
         resetStatus();
+        m_loopTime -= m_loopSpeed;
     }
 }
 
