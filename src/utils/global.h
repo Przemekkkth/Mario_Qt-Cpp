@@ -23,6 +23,30 @@ enum CELL_TYPE{
     ActivatedQuestionBlock
 };
 
+static QString cellTypeToString(CELL_TYPE t)
+{
+    if(t == Empty)
+    {
+        return QString("Empty");
+    }
+    else if(t == Brick)
+    {
+        return QString("Brick");
+    }
+    else if(t == Wall0)
+    {
+        return QString("Wall0");
+    }
+    else if(t == Wall1)
+    {
+        return QString("Wall1");
+    }
+    else
+    {
+        return QString("Invalid");
+    }
+}
+
 enum BODY_TYPE
 {
     NONE, STATIC, DYNAMIC

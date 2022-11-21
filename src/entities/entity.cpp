@@ -7,6 +7,11 @@ Entity::Entity()
 
 }
 
+QPointF Entity::convertMapPointToScreenPoint(int x, int y)
+{
+
+}
+
 void Entity::draw(GameScene &scene)
 {
 

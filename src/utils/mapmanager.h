@@ -10,6 +10,7 @@ class MapManager
 {
 public:
     static const QMap<QRgb, GLOBAL::CELL_TYPE> colorToCellMap;
+    static const QMap<GLOBAL::CELL_TYPE, QPoint> cellToPointOfSpriteMap;
     MapManager();
 
     int getMapSketchHeight() const;
@@ -18,6 +19,7 @@ public:
 
     void drawMap(const bool drawBackground, const bool underground, const unsigned view_x, GameScene& scene);
     void drawBackground(int cameraX, GameScene& scene);
+    void drawForeground(int cameraX, GameScene& scene);
     void setMapCell(const int x, const int y, const GLOBAL::CELL_TYPE& cell);
     GLOBAL::CELL_TYPE mapCell(int x, int y) const;
     void setMapSize(const int new_size);
@@ -25,6 +27,7 @@ public:
 
     QRgb getMapSketchPixel(const int x, const int y) const;
     void convertFromSketch(int currentLevel);
+    void printMap();
 private:
     QImage m_mapSketch;
 
@@ -34,7 +37,7 @@ private:
 
     GLOBAL::Map m_map;
     static const QMap<QRgb, QPoint> colorToPointOfSpriteMap;
-    static const QMap<GLOBAL::CELL_TYPE, QPoint> cellToPointOfSpriteMap;
+
     static const QList<GLOBAL::CELL_TYPE> animatedCells;
 };
 #endif // MAPMANAGER_H

@@ -10,7 +10,9 @@ GameScene::GameScene(QObject *parent)
 
     m_mapManager.updateMapSketch(0);
     m_mapManager.convertFromSketch(0);
-
+    //m_mapManager.drawForeground(0, *this);
+    //exit(0);
+    //m_mapManager.printMap();
     for(int i = 0; i < 256; ++i)
     {
         m_keys[i] = new KeyStatus();
@@ -36,6 +38,7 @@ void GameScene::loop()
         clear();
         //qDebug() << "m_x " << m_x;
         m_mapManager.drawBackground(m_x,*this);
+        m_mapManager.drawForeground(m_x, *this);
         setSceneRect(m_x, 0, GLOBAL::SCREEN_SIZE.width(), GLOBAL::SCREEN_SIZE.height());
         handlePlayerInput();
         resetStatus();

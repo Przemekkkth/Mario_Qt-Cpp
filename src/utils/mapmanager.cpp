@@ -1,6 +1,7 @@
 #include "mapmanager.h"
 #include <QGraphicsPixmapItem>
 #include "../gamescene.h"
+#include "../entities/block.h"
 
 const QMap<QRgb, QPoint> MapManager::colorToPointOfSpriteMap={
     {qRgb(146, 219, 0  ), QPoint(5 , 0 )},
@@ -71,8 +72,6 @@ int MapManager::getMapWidth() const
 {
     return m_map.size();
 }
-
-
 
 void MapManager::drawMap(const bool drawBackground, const bool underground, const unsigned view_x, GameScene &scene)
 {
@@ -215,15 +214,37 @@ void MapManager::drawBackground(int cameraX, GameScene &scene)
 
                 QGraphicsPixmapItem* pItem = new QGraphicsPixmapItem();
                 pItem->setPos(GLOBAL::TILE_SIZE.width() * a, GLOBAL::TILE_SIZE.width() * b);
-                //cell_sprite.setTextureRect(sf::IntRect(CELL_SIZE * sprite_x, CELL_SIZE * sprite_y, CELL_SIZE, CELL_SIZE));
                 pItem->setPixmap(m_cellSprite.copy(QRect(16*sprite_x, 16*sprite_y, 16, 16)).scaled(GLOBAL::TILE_SIZE.width(), GLOBAL::TILE_SIZE.height()));
                 scene.addItem(pItem);
-                //i_window.draw(cell_sprite);
             }
 
         }
     }
 
+}
+
+void MapManager::drawForeground(int cameraX, GameScene &scene)
+{
+    unsigned short map_end = ceil((GLOBAL::SCREEN_SIZE.width() + cameraX) / static_cast<float>(GLOBAL::TILE_SIZE.width()));
+    unsigned short map_height = floor(m_mapSketch.height() / 3.f);
+    unsigned short map_start = floor(cameraX / static_cast<float>(GLOBAL::TILE_SIZE.width()));
+
+    for (unsigned short a = map_start; a < map_end; a++)
+    {
+        for (unsigned short b = 0; b < map_height; b++)
+        {
+            foreach(Block* block, Block::BLOCKS)
+            {
+                if(int(block->position().x()) == int(a*GLOBAL::TILE_SIZE.width())
+                        &&
+                        int(block->position().y()) == int(b*GLOBAL::TILE_SIZE.height())     )
+                {
+                    qDebug() << "Blocks exists " << GLOBAL::cellTypeToString(block->cellType());
+                    block->draw(scene);
+                }
+            }
+        }
+    }
 }
 
 void MapManager::setMapCell(const int x, const int y, const GLOBAL::CELL_TYPE &cell)
@@ -244,7 +265,8 @@ void MapManager::setMapSize(const int new_size)
 
 void MapManager::updateMapSketch(const int current_level)
 {
-    m_mapSketch.load(":/res/LevelSketch" + QString::number(current_level) + ".png");
+    //m_mapSketch.load(":/res/LevelSketch" + QString::number(current_level) + ".png");
+    m_mapSketch.load(":/res/LevelSketchTest34x45.png");
     //m_mapSketch.convertTo(QImage::Format_RGBA32FPx4);
     qDebug() << "format " << m_mapSketch.format();
 }
@@ -282,4 +304,34 @@ void MapManager::convertFromSketch(int currentLevel)
             }
         }
     }
+
+
+    //Create Static blocks
+    for(int x = 0; x < m_map.size(); ++x)
+    {
+        for(int y = 0; y < int(m_map.at(0).size()); ++y)
+        {
+            if(cellToPointOfSpriteMap.contains(m_map[x][y]) )
+            {
+                Block::CreateBlock(m_map[x][y], QPointF(x * GLOBAL::TILE_SIZE.width(), y * GLOBAL::TILE_SIZE.height()));
+            }
+        }
+    }
+}
+
+void MapManager::printMap()
+{
+    qDebug() << "Width: " << m_map.size();
+    int height = m_map.at(0).size();
+    qDebug() << "Height: " << height;
+    for(int x = 0; x < m_map.size(); ++x)
+    {
+        QString str = "";
+        for(int y = 0; y < height; ++y)
+        {
+            str += "(" + QString::number(x) + " , " + QString::number(x) + " ) => " + GLOBAL::cellTypeToString(m_map[x][y]);
+        }
+        qDebug() << str;
+    }
+
 }
