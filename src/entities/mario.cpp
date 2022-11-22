@@ -61,22 +61,22 @@ void Mario::update(float elapsedTime, GameScene &scene)
             m_velocityX += (m_onGround ? +MOVE_SPEED : +0.75*MOVE_SPEED) * elapsedTime;
         }
     }
-    if(scene.keys(Qt::Key_Z)->m_held)
+    if(scene.keys(Qt::Key_Z)->m_released)
     {
-        if (m_velocityY == 0)
+        if (m_onGround)
         {
-            m_velocityY = -JUMP_SPEED;
+            m_velocityY = -JUMP_SPEED * elapsedTime;
             //nDirModX = 1;
         }
     }
     else
     {
-        if (m_velocityY != 0)
-        {
-            if(m_velocityY < 0.0f)
-                m_velocityY = 0.0f;
-            //nDirModX = 0;
-        }
+//        if (m_velocityY != 0)
+//        {
+//            if(m_velocityY < 0.0f)
+//                m_velocityY = 0.0f;
+//            //nDirModX = 0;
+//        }
     }
     update(elapsedTime);
 }
@@ -142,9 +142,9 @@ void Mario::checkCollisionWithBlocks()
             }
         }
 //Y-axis
-        m_onGround = false;
-        if (m_velocityY <= 0.0f) // Moving Up
+        if (m_velocityY < 0.0f) // Moving Up
         {
+            m_onGround = false;
             fNewPlayerPosY = position().y() + m_velocityY;
             if(Block::BLOCKS.at(i)->hitBox().contains(position().x(), fNewPlayerPosY)
                     ||
