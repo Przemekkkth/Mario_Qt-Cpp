@@ -22,7 +22,7 @@ void Mario::update(float elapsedTime)
 {
     m_velocityY += GLOBAL::GRAVITY;
     // Drag
-    if (!m_onGround)
+    if (m_onGround)
     {
         m_velocityX += -DRAG_VALUE * m_velocityX * elapsedTime;
         if (std::fabs(m_velocityX) < 0.01f)
