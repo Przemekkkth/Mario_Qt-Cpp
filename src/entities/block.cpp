@@ -39,6 +39,12 @@ QPixmap Block::pixmap() const
     return m_pixmap;
 }
 
+QRectF Block::hitBox()
+{
+    return QRectF(position().x(), position().y(),
+                  GLOBAL::TILE_SIZE.width(), GLOBAL::TILE_SIZE.height());
+}
+
 void Block::setCellType(GLOBAL::CELL_TYPE cellType)
 {
     m_cellType = cellType;

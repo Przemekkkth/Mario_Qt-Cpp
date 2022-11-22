@@ -11,6 +11,7 @@ public:
     static void CreateBlock(GLOBAL::CELL_TYPE cType, QPointF mapPosition);
     void setPixmap(const QPixmap& pixmap);
     QPixmap pixmap() const;
+    QRectF hitBox();
 
     void setCellType(GLOBAL::CELL_TYPE cellType);
     GLOBAL::CELL_TYPE cellType() const;

@@ -47,7 +47,7 @@ void GameScene::loop()
 //update
 //draw
         clear();
-        //qDebug() << "m_x " << m_x;
+//qDebug() << "m_x " << m_x;
         m_mapManager.drawBackground(0,*this);
         m_mapManager.drawForeground(0, *this);
         m_mario->draw(*this);

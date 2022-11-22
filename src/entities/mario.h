@@ -22,6 +22,8 @@ public:
     void update(float elapsedTime, GameScene& scene);
 private:
     void clampVelocities(float elapsedTime);
+    void checkCollisionWithBlocks();
+    QRectF hitBox();
     QPixmap m_pixmap;
     float m_velocityX, m_velocityY;
     bool m_onGround, m_runMode;

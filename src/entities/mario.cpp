@@ -1,4 +1,5 @@
 #include "mario.h"
+#include "block.h"
 #include <QGraphicsPixmapItem>
 
 Mario::Mario()
@@ -19,7 +20,7 @@ void Mario::draw(GameScene &scene)
 
 void Mario::update(float elapsedTime)
 {
-    //m_velocityY += GLOBAL::GRAVITY;
+    m_velocityY += GLOBAL::GRAVITY;
     // Drag
     if (!m_onGround)
     {
@@ -30,7 +31,7 @@ void Mario::update(float elapsedTime)
         }
     }
     clampVelocities(elapsedTime);
-    qDebug() << m_velocityX;
+    checkCollisionWithBlocks();
     setPosition(position().x() + m_velocityX, position().y() + m_velocityY);
 }
 
@@ -108,5 +109,65 @@ void Mario::clampVelocities(float elapsedTime)
 //    if (fPlayerVelY < -100.0f)
 //    {
 //        fPlayerVelY = -100.0f;
-//    }
+    //    }
+}
+
+void Mario::checkCollisionWithBlocks()
+{
+    // Calculate potential new position
+    float fNewPlayerPosX;
+    float fNewPlayerPosY;
+
+    for(int i = 0; i < Block::BLOCKS.size(); ++i)
+    {
+//X-axis
+        if (m_velocityX <= 0.0f) // Moving Left
+        {
+            fNewPlayerPosX = position().x() + m_velocityX;
+            if(Block::BLOCKS.at(i)->hitBox().contains(fNewPlayerPosX, position().y())
+                    ||
+               Block::BLOCKS.at(i)->hitBox().contains(fNewPlayerPosX, position().y()+hitBox().height()))
+            {
+                m_velocityX = 0.0f;
+            }
+        }
+        else // Moving Right
+        {
+            fNewPlayerPosX = position().x() + hitBox().width() + m_velocityX;
+            if(Block::BLOCKS.at(i)->hitBox().contains(fNewPlayerPosX, position().y())
+                    ||
+               Block::BLOCKS.at(i)->hitBox().contains(fNewPlayerPosX, position().y()+hitBox().height()))
+            {
+                m_velocityX = 0.0f;
+            }
+        }
+//Y-axis
+        m_onGround = false;
+        if (m_velocityY <= 0.0f) // Moving Up
+        {
+            fNewPlayerPosY = position().y() + m_velocityY;
+            if(Block::BLOCKS.at(i)->hitBox().contains(position().x(), fNewPlayerPosY)
+                    ||
+               Block::BLOCKS.at(i)->hitBox().contains(position().x()+hitBox().width() , fNewPlayerPosY))
+            {
+                m_velocityY = 0.1f;
+            }
+        }
+        else // Moving Down
+        {
+            fNewPlayerPosY = position().y() + hitBox().height() + m_velocityY;
+            if(Block::BLOCKS.at(i)->hitBox().contains(position().x(), fNewPlayerPosY)
+                    ||
+               Block::BLOCKS.at(i)->hitBox().contains(position().x()+hitBox().width() , fNewPlayerPosY))
+            {
+                m_velocityY = 0.0f;
+                m_onGround = true;
+            }
+        }
+    }
+}
+
+QRectF Mario::hitBox()
+{
+    return QRectF(position().x(), position().y(), GLOBAL::TILE_SIZE.width(), GLOBAL::TILE_SIZE.height());
 }
