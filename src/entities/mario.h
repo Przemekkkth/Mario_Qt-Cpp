@@ -7,7 +7,6 @@
 class GameScene;
 class Mario : public Entity {
 public:
-    Mario();
     static constexpr const float MOVE_SPEED         = 80.0f;
     static constexpr const float RUN_SPEED          = 12.0f;
     static constexpr const float JUMP_SPEED         = 450.0f;
@@ -15,7 +14,7 @@ public:
     static constexpr const float MAX_MOVE_SPEED     = 100.0f;
     static constexpr const float MAX_RUN_SPEED      = 12.0f;
     static constexpr const float MAX_FALLDOWN_SPEED = 350.0f;
-    // Entity interface
+    Mario();
 public:
     virtual void draw(GameScene &scene) override;
     virtual void update(float elapsedTime) override;

@@ -13,7 +13,9 @@ Mario::Mario()
 void Mario::draw(GameScene &scene)
 {
     QGraphicsPixmapItem* pItem = new QGraphicsPixmapItem();
-    pItem->setPos(position());
+    //pItem->setPos(convertToScreenPos(position()));
+    pItem->setPos(int(position().x()), int(position().y()));
+    qDebug() << pItem->pos();
     pItem->setPixmap(m_pixmap);
     scene.addItem(pItem);
 }

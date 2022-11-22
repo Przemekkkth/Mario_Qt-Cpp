@@ -265,7 +265,7 @@ void MapManager::setMapSize(const int new_size)
 void MapManager::updateMapSketch(const int current_level)
 {
     //m_mapSketch.load(":/res/LevelSketch" + QString::number(current_level) + ".png");
-    m_mapSketch.load(":/res/LevelSketchTest34x45.png");
+    m_mapSketch.load(":/res/LevelSketch0.png");
     //m_mapSketch.convertTo(QImage::Format_RGBA32FPx4);
     qDebug() << "format " << m_mapSketch.format();
 }

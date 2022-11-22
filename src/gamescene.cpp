@@ -47,11 +47,10 @@ void GameScene::loop()
 //update
 //draw
         clear();
-//qDebug() << "m_x " << m_x;
-        m_mapManager.drawBackground(0,*this);
-        m_mapManager.drawForeground(0, *this);
+        m_mapManager.drawBackground(getCameraX(*m_mario),*this);
+        m_mapManager.drawForeground(getCameraX(*m_mario), *this);
         m_mario->draw(*this);
-        setSceneRect(0, 0, GLOBAL::SCREEN_SIZE.width(), GLOBAL::SCREEN_SIZE.height());
+        setSceneRect(getCameraX(*m_mario), 0, GLOBAL::SCREEN_SIZE.width(), GLOBAL::SCREEN_SIZE.height());
 //reset key/mouse status, reset frame counter
         resetStatus();
         m_loopTime -= m_loopSpeed;
@@ -81,6 +80,18 @@ void GameScene::resetStatus()
         m_keys[i]->m_released = false;
     }
     m_mouse->m_released = false;
+}
+
+float GameScene::getCameraX(const Mario &mario)
+{
+    if(mario.x() < GLOBAL::SCREEN_SIZE.width()/2){
+        return 0.0f;
+    }
+    else
+    {
+        //return QPointF(GLOBAL::SCREEN_SIZE.width()/2-GLOBAL::TILE_SIZE.width(), marioPos.y());
+        return mario.position().x() - GLOBAL::SCREEN_SIZE.width()/2;
+    }
 }
 
 void GameScene::keyPressEvent(QKeyEvent *event)
