@@ -13,9 +13,7 @@ Mario::Mario()
 void Mario::draw(GameScene &scene)
 {
     QGraphicsPixmapItem* pItem = new QGraphicsPixmapItem();
-    //pItem->setPos(convertToScreenPos(position()));
     pItem->setPos(int(position().x()), int(position().y()));
-    qDebug() << pItem->pos();
     pItem->setPixmap(m_pixmap);
     scene.addItem(pItem);
 }
@@ -34,7 +32,7 @@ void Mario::update(float elapsedTime)
     }
     clampVelocities(elapsedTime);
     checkCollisionWithBlocks();
-    setPosition(position().x() + m_velocityX, position().y() + m_velocityY);
+    setPosition(int(position().x() + m_velocityX), int(position().y() + m_velocityY));
 }
 
 void Mario::update(float elapsedTime, GameScene &scene)
@@ -117,28 +115,29 @@ void Mario::clampVelocities(float elapsedTime)
 void Mario::checkCollisionWithBlocks()
 {
     // Calculate potential new position
-    float fNewPlayerPosX;
-    float fNewPlayerPosY;
+    float CollideX;
+    float CollideY;
+    float shrinkPixel = 5.f, shrinkFactor = 0.9f;//For one tile row, column to avoid block
 
     for(int i = 0; i < Block::BLOCKS.size(); ++i)
     {
 //X-axis
         if (m_velocityX <= 0.0f) // Moving Left
         {
-            fNewPlayerPosX = position().x() + m_velocityX;
-            if(Block::BLOCKS.at(i)->hitBox().contains(fNewPlayerPosX, position().y())
+            CollideX = position().x() + m_velocityX;
+            if(Block::BLOCKS.at(i)->hitBox().contains(CollideX, position().y())
                     ||
-               Block::BLOCKS.at(i)->hitBox().contains(fNewPlayerPosX, position().y()+hitBox().height()))
+               Block::BLOCKS.at(i)->hitBox().contains(CollideX, position().y()+hitBox().height()))
             {
                 m_velocityX = 0.0f;
             }
         }
         else // Moving Right
         {
-            fNewPlayerPosX = position().x() + hitBox().width() + m_velocityX;
-            if(Block::BLOCKS.at(i)->hitBox().contains(fNewPlayerPosX, position().y())
+            CollideX = position().x() + hitBox().width() + m_velocityX;
+            if(Block::BLOCKS.at(i)->hitBox().contains(CollideX, position().y())
                     ||
-               Block::BLOCKS.at(i)->hitBox().contains(fNewPlayerPosX, position().y()+hitBox().height()))
+               Block::BLOCKS.at(i)->hitBox().contains(CollideX, position().y()+hitBox().height()))
             {
                 m_velocityX = 0.0f;
             }
@@ -147,20 +146,20 @@ void Mario::checkCollisionWithBlocks()
         if (m_velocityY < 0.0f) // Moving Up
         {
             m_onGround = false;
-            fNewPlayerPosY = position().y() + m_velocityY;
-            if(Block::BLOCKS.at(i)->hitBox().contains(position().x(), fNewPlayerPosY)
+            CollideY = position().y() + m_velocityY;
+            if(Block::BLOCKS.at(i)->hitBox().contains(position().x()+shrinkPixel, CollideY)
                     ||
-               Block::BLOCKS.at(i)->hitBox().contains(position().x()+hitBox().width() , fNewPlayerPosY))
+               Block::BLOCKS.at(i)->hitBox().contains(position().x()+shrinkFactor*hitBox().width() , CollideY))
             {
                 m_velocityY = 0.1f;
             }
         }
         else // Moving Down
         {
-            fNewPlayerPosY = position().y() + hitBox().height() + m_velocityY;
-            if(Block::BLOCKS.at(i)->hitBox().contains(position().x(), fNewPlayerPosY)
+            CollideY = position().y() + hitBox().height() + m_velocityY;
+            if(Block::BLOCKS.at(i)->hitBox().contains(position().x()+shrinkPixel, CollideY)
                     ||
-               Block::BLOCKS.at(i)->hitBox().contains(position().x()+hitBox().width() , fNewPlayerPosY))
+               Block::BLOCKS.at(i)->hitBox().contains(position().x()+shrinkFactor*hitBox().width() , CollideY))
             {
                 m_velocityY = 0.0f;
                 m_onGround = true;
