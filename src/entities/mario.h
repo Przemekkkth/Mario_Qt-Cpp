@@ -27,9 +27,10 @@ private:
     void collideWithBlock(Block *block);
     void setAnimatationState(QString state);
     void setFliped();
+    void createAnimations();
     bool m_big, m_fliped;
     QRectF hitBox();
-    QPixmap m_pixmap, m_texture;
+    QPixmap m_texture;
     float m_velocityX, m_velocityY;
     bool m_onGround, m_runMode;
     Animator m_animator;

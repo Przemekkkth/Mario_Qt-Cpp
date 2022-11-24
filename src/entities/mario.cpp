@@ -2,65 +2,71 @@
 #include "block.h"
 #include <QGraphicsPixmapItem>
 
+
 Mario::Mario()
     : m_big(false), m_fliped(false), m_velocityX(0.0f), m_velocityY(0.0f), m_onGround(false), m_runMode(false)
 {
-    m_texture = QPixmap(":/res/mario_items_18x18.png");
-    m_pixmap = QPixmap(":/res/mario_items_18x18.png")
-            .copy(0,4*GLOBAL::MARIO_TEXTURE_SIZE.width(), GLOBAL::MARIO_TEXTURE_SIZE.width(),GLOBAL::MARIO_TEXTURE_SIZE.width())
-            .scaled(GLOBAL::TILE_SIZE.width(), GLOBAL::TILE_SIZE.height());
+    createAnimations();
+}
 
+void Mario::createAnimations()
+{
+    m_texture = QPixmap(":/res/mario_items_18x18.png");
+    const float TSW = GLOBAL::MARIO_TEXTURE_SIZE.width(); //TextureSizeWidth
+    const float TSH = GLOBAL::MARIO_TEXTURE_SIZE.height();//TextureSizeWidth
+    const float TS  = GLOBAL::TILE_SIZE.width();          //TileWidth
+    const float TH  = GLOBAL::TILE_SIZE.height();         //TileHeight
     //0 4 1frame
-    m_animator.m_mapStates["idle"].push_back(m_texture.copy(0,4*GLOBAL::MARIO_TEXTURE_SIZE.width(), GLOBAL::MARIO_TEXTURE_SIZE.width(),GLOBAL::MARIO_TEXTURE_SIZE.width())
-                                             .scaled(GLOBAL::TILE_SIZE.width(), GLOBAL::TILE_SIZE.height()));
-    m_animator.m_mapStates["idle_f_"].push_back(m_texture.copy(0,4*GLOBAL::MARIO_TEXTURE_SIZE.width(), GLOBAL::MARIO_TEXTURE_SIZE.width(),GLOBAL::MARIO_TEXTURE_SIZE.width())
-                                             .scaled(GLOBAL::TILE_SIZE.width(), GLOBAL::TILE_SIZE.height()).transformed(QTransform().scale(-1,1)));
+    m_animator.m_mapStates["idle"].push_back(m_texture.copy(0,4*TSH, TSW,TSH)
+                                             .scaled(TS, TH));
+    m_animator.m_mapStates["idle_f_"].push_back(m_texture.copy(0,4*TSH, TSW,TSW)
+                                             .scaled(TS, TH).transformed(QTransform().scale(-1,1)));
 
     //2 4 1frame
-    m_animator.m_mapStates["jump"].push_back(m_texture.copy(2*GLOBAL::MARIO_TEXTURE_SIZE.width(),4*GLOBAL::MARIO_TEXTURE_SIZE.width(), GLOBAL::MARIO_TEXTURE_SIZE.width(),GLOBAL::MARIO_TEXTURE_SIZE.width())
-                                             .scaled(GLOBAL::TILE_SIZE.width(), GLOBAL::TILE_SIZE.height()));
-    m_animator.m_mapStates["jump_f_"].push_back(m_texture.copy(2*GLOBAL::MARIO_TEXTURE_SIZE.width(),4*GLOBAL::MARIO_TEXTURE_SIZE.width(), GLOBAL::MARIO_TEXTURE_SIZE.width(),GLOBAL::MARIO_TEXTURE_SIZE.width())
-                                             .scaled(GLOBAL::TILE_SIZE.width(), GLOBAL::TILE_SIZE.height()).transformed(QTransform().scale(-1,1)));
+    m_animator.m_mapStates["jump"].push_back(m_texture.copy(2*TSW,4*TSH, TSW,TSH)
+                                             .scaled(TS, TH));
+    m_animator.m_mapStates["jump_f_"].push_back(m_texture.copy(2*TSW,4*TSH, TSW,TSH)
+                                             .scaled(TS, TH).transformed(QTransform().scale(-1,1)));
     //4 4 3frames
-    m_animator.m_mapStates["run"].push_back(m_texture.copy(4*GLOBAL::MARIO_TEXTURE_SIZE.width(),4*GLOBAL::MARIO_TEXTURE_SIZE.width(), GLOBAL::MARIO_TEXTURE_SIZE.width(),GLOBAL::MARIO_TEXTURE_SIZE.width())
-                                            .scaled(GLOBAL::TILE_SIZE.width(), GLOBAL::TILE_SIZE.height()));
-    m_animator.m_mapStates["run"].push_back(m_texture.copy(5*GLOBAL::MARIO_TEXTURE_SIZE.width(),4*GLOBAL::MARIO_TEXTURE_SIZE.width(), GLOBAL::MARIO_TEXTURE_SIZE.width(),GLOBAL::MARIO_TEXTURE_SIZE.width())
-                                            .scaled(GLOBAL::TILE_SIZE.width(), GLOBAL::TILE_SIZE.height()));
-    m_animator.m_mapStates["run"].push_back(m_texture.copy(6*GLOBAL::MARIO_TEXTURE_SIZE.width(),4*GLOBAL::MARIO_TEXTURE_SIZE.width(), GLOBAL::MARIO_TEXTURE_SIZE.width(),GLOBAL::MARIO_TEXTURE_SIZE.width())
-                                            .scaled(GLOBAL::TILE_SIZE.width(), GLOBAL::TILE_SIZE.height()));
+    m_animator.m_mapStates["run"].push_back(m_texture.copy(4*TSW,4*TSH, TSW,TSH)
+                                            .scaled(TS, TH));
+    m_animator.m_mapStates["run"].push_back(m_texture.copy(5*TSW,4*TSH, TSW,TSH)
+                                            .scaled(TS, TH));
+    m_animator.m_mapStates["run"].push_back(m_texture.copy(6*TSW,4*TSH, TSW,TSH)
+                                            .scaled(TS, TH));
 
-    m_animator.m_mapStates["run_f_"].push_back(m_texture.copy(4*GLOBAL::MARIO_TEXTURE_SIZE.width(),4*GLOBAL::MARIO_TEXTURE_SIZE.width(), GLOBAL::MARIO_TEXTURE_SIZE.width(),GLOBAL::MARIO_TEXTURE_SIZE.width())
-                                            .scaled(GLOBAL::TILE_SIZE.width(), GLOBAL::TILE_SIZE.height()).transformed(QTransform().scale(-1,1)));
-    m_animator.m_mapStates["run_f_"].push_back(m_texture.copy(5*GLOBAL::MARIO_TEXTURE_SIZE.width(),4*GLOBAL::MARIO_TEXTURE_SIZE.width(), GLOBAL::MARIO_TEXTURE_SIZE.width(),GLOBAL::MARIO_TEXTURE_SIZE.width())
-                                            .scaled(GLOBAL::TILE_SIZE.width(), GLOBAL::TILE_SIZE.height()).transformed(QTransform().scale(-1,1)));
-    m_animator.m_mapStates["run_f_"].push_back(m_texture.copy(6*GLOBAL::MARIO_TEXTURE_SIZE.width(),4*GLOBAL::MARIO_TEXTURE_SIZE.width(), GLOBAL::MARIO_TEXTURE_SIZE.width(),GLOBAL::MARIO_TEXTURE_SIZE.width())
-                                            .scaled(GLOBAL::TILE_SIZE.width(), GLOBAL::TILE_SIZE.height()).transformed(QTransform().scale(-1,1)));
+    m_animator.m_mapStates["run_f_"].push_back(m_texture.copy(4*TSW,4*TSH, TSW,TSH)
+                                            .scaled(TS, TH).transformed(QTransform().scale(-1,1)));
+    m_animator.m_mapStates["run_f_"].push_back(m_texture.copy(5*TSW,4*TSH, TSW,TSH)
+                                            .scaled(TS, TH).transformed(QTransform().scale(-1,1)));
+    m_animator.m_mapStates["run_f_"].push_back(m_texture.copy(6*TSW,4*TSH, TSW,TSH)
+                                            .scaled(TS, TH).transformed(QTransform().scale(-1,1)));
 ///////////////////////////BIG//////////////////////
     //0 0  1frame
-    m_animator.m_mapStates["idle_b_"].push_back(m_texture.copy(0,0*GLOBAL::MARIO_TEXTURE_SIZE.height(), GLOBAL::MARIO_TEXTURE_SIZE.width(),2*GLOBAL::MARIO_TEXTURE_SIZE.height())
-                                             .scaled(GLOBAL::TILE_SIZE.width(), 2*GLOBAL::TILE_SIZE.height()));
-    m_animator.m_mapStates["idle_b__f_"].push_back(m_texture.copy(0,0*GLOBAL::MARIO_TEXTURE_SIZE.height(), GLOBAL::MARIO_TEXTURE_SIZE.width(),2*GLOBAL::MARIO_TEXTURE_SIZE.height())
-                                             .scaled(GLOBAL::TILE_SIZE.width(), 2*GLOBAL::TILE_SIZE.height()).transformed(QTransform().scale(-1,1)));
+    m_animator.m_mapStates["idle_b_"].push_back(m_texture.copy(0,0*TSH, TSW,2*TSH)
+                                             .scaled(TS, 2*TH));
+    m_animator.m_mapStates["idle_b__f_"].push_back(m_texture.copy(0,0*TSH, TSW,2*TSH)
+                                             .scaled(TS, 2*TH).transformed(QTransform().scale(-1,1)));
     //2 0 1frame
-    m_animator.m_mapStates["jump_b_"].push_back(m_texture.copy(2*GLOBAL::MARIO_TEXTURE_SIZE.width(),0*GLOBAL::MARIO_TEXTURE_SIZE.height(), GLOBAL::MARIO_TEXTURE_SIZE.width(),2*GLOBAL::MARIO_TEXTURE_SIZE.height())
-                                             .scaled(GLOBAL::TILE_SIZE.width(), 2*GLOBAL::TILE_SIZE.height()));
-    m_animator.m_mapStates["jump_b__f_"].push_back(m_texture.copy(2*GLOBAL::MARIO_TEXTURE_SIZE.width(),0*GLOBAL::MARIO_TEXTURE_SIZE.height(), GLOBAL::MARIO_TEXTURE_SIZE.width(),2*GLOBAL::MARIO_TEXTURE_SIZE.height())
-                                             .scaled(GLOBAL::TILE_SIZE.width(), 2*GLOBAL::TILE_SIZE.height()).transformed(QTransform().scale(-1,1)));
+    m_animator.m_mapStates["jump_b_"].push_back(m_texture.copy(2*TSW,0*TSH, TSW,2*TSH)
+                                             .scaled(TS, 2*TH));
+    m_animator.m_mapStates["jump_b__f_"].push_back(m_texture.copy(2*TSW,0*TSH, TSW,2*TSH)
+                                             .scaled(TS, 2*TH).transformed(QTransform().scale(-1,1)));
 
     //0 4 3frames
-    m_animator.m_mapStates["run_b_"].push_back(m_texture.copy(4*GLOBAL::MARIO_TEXTURE_SIZE.width(),0*GLOBAL::MARIO_TEXTURE_SIZE.height(), GLOBAL::MARIO_TEXTURE_SIZE.width(),2*GLOBAL::MARIO_TEXTURE_SIZE.height())
-                                            .scaled(GLOBAL::TILE_SIZE.width(), 2*GLOBAL::TILE_SIZE.height()));
-    m_animator.m_mapStates["run_b_"].push_back(m_texture.copy(5*GLOBAL::MARIO_TEXTURE_SIZE.width(),0*GLOBAL::MARIO_TEXTURE_SIZE.height(), GLOBAL::MARIO_TEXTURE_SIZE.width(),2*GLOBAL::MARIO_TEXTURE_SIZE.height())
-                                            .scaled(GLOBAL::TILE_SIZE.width(), 2*GLOBAL::TILE_SIZE.height()));
-    m_animator.m_mapStates["run_b_"].push_back(m_texture.copy(6*GLOBAL::MARIO_TEXTURE_SIZE.width(),0*GLOBAL::MARIO_TEXTURE_SIZE.height(), GLOBAL::MARIO_TEXTURE_SIZE.width(),2*GLOBAL::MARIO_TEXTURE_SIZE.height())
-                                            .scaled(GLOBAL::TILE_SIZE.width(), 2*GLOBAL::TILE_SIZE.height()));
+    m_animator.m_mapStates["run_b_"].push_back(m_texture.copy(4*TSW,0*TSH, TSW,2*TSH)
+                                            .scaled(TS, 2*TH));
+    m_animator.m_mapStates["run_b_"].push_back(m_texture.copy(5*TSW,0*TSH, TSW,2*TSH)
+                                            .scaled(TS, 2*TH));
+    m_animator.m_mapStates["run_b_"].push_back(m_texture.copy(6*TSW,0*TSH, TSW,2*TSH)
+                                            .scaled(TS, 2*TH));
 
-    m_animator.m_mapStates["run_b__f_"].push_back(m_texture.copy(4*GLOBAL::MARIO_TEXTURE_SIZE.width(),0*GLOBAL::MARIO_TEXTURE_SIZE.width(), GLOBAL::MARIO_TEXTURE_SIZE.width(),GLOBAL::MARIO_TEXTURE_SIZE.width())
-                                            .scaled(GLOBAL::TILE_SIZE.width(), 2*GLOBAL::TILE_SIZE.height()).transformed(QTransform().scale(-1,1)));
-    m_animator.m_mapStates["run_b__f_"].push_back(m_texture.copy(5*GLOBAL::MARIO_TEXTURE_SIZE.width(),0*GLOBAL::MARIO_TEXTURE_SIZE.width(), GLOBAL::MARIO_TEXTURE_SIZE.width(),GLOBAL::MARIO_TEXTURE_SIZE.width())
-                                            .scaled(GLOBAL::TILE_SIZE.width(), 2*GLOBAL::TILE_SIZE.height()).transformed(QTransform().scale(-1,1)));
-    m_animator.m_mapStates["run_b__f_"].push_back(m_texture.copy(6*GLOBAL::MARIO_TEXTURE_SIZE.width(),0*GLOBAL::MARIO_TEXTURE_SIZE.width(), GLOBAL::MARIO_TEXTURE_SIZE.width(),GLOBAL::MARIO_TEXTURE_SIZE.width())
-                                            .scaled(GLOBAL::TILE_SIZE.width(), 2*GLOBAL::TILE_SIZE.height()).transformed(QTransform().scale(-1,1)));
+    m_animator.m_mapStates["run_b__f_"].push_back(m_texture.copy(4*TSW,0*TSH, TSW,TSH)
+                                            .scaled(TS, 2*TH).transformed(QTransform().scale(-1,1)));
+    m_animator.m_mapStates["run_b__f_"].push_back(m_texture.copy(5*TSW,0*TSH, TSW,TSH)
+                                            .scaled(TS, 2*TH).transformed(QTransform().scale(-1,1)));
+    m_animator.m_mapStates["run_b__f_"].push_back(m_texture.copy(6*TSW,0*TSH, TSW,TSH)
+                                            .scaled(TS, 2*TH).transformed(QTransform().scale(-1,1)));
     m_animator.changeState("idle");
     m_animator.m_timeBetweenFrames = 0.25f;
 }
