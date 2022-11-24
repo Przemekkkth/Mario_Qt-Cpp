@@ -21,13 +21,13 @@ void Mario::createAnimations()
     m_animator.m_mapStates["idle"].push_back(m_texture.copy(0,4*TSH, TSW,TSH)
                                              .scaled(TS, TH));
     m_animator.m_mapStates["idle_f_"].push_back(m_texture.copy(0,4*TSH, TSW,TSW)
-                                             .scaled(TS, TH).transformed(QTransform().scale(-1,1)));
+                                                .scaled(TS, TH).transformed(QTransform().scale(-1,1)));
 
     //2 4 1frame
     m_animator.m_mapStates["jump"].push_back(m_texture.copy(2*TSW,4*TSH, TSW,TSH)
                                              .scaled(TS, TH));
     m_animator.m_mapStates["jump_f_"].push_back(m_texture.copy(2*TSW,4*TSH, TSW,TSH)
-                                             .scaled(TS, TH).transformed(QTransform().scale(-1,1)));
+                                                .scaled(TS, TH).transformed(QTransform().scale(-1,1)));
     //4 4 3frames
     m_animator.m_mapStates["run"].push_back(m_texture.copy(4*TSW,4*TSH, TSW,TSH)
                                             .scaled(TS, TH));
@@ -37,37 +37,37 @@ void Mario::createAnimations()
                                             .scaled(TS, TH));
 
     m_animator.m_mapStates["run_f_"].push_back(m_texture.copy(4*TSW,4*TSH, TSW,TSH)
-                                            .scaled(TS, TH).transformed(QTransform().scale(-1,1)));
+                                               .scaled(TS, TH).transformed(QTransform().scale(-1,1)));
     m_animator.m_mapStates["run_f_"].push_back(m_texture.copy(5*TSW,4*TSH, TSW,TSH)
-                                            .scaled(TS, TH).transformed(QTransform().scale(-1,1)));
+                                               .scaled(TS, TH).transformed(QTransform().scale(-1,1)));
     m_animator.m_mapStates["run_f_"].push_back(m_texture.copy(6*TSW,4*TSH, TSW,TSH)
-                                            .scaled(TS, TH).transformed(QTransform().scale(-1,1)));
-///////////////////////////BIG//////////////////////
+                                               .scaled(TS, TH).transformed(QTransform().scale(-1,1)));
+    ///////////////////////////BIG//////////////////////
     //0 0  1frame
     m_animator.m_mapStates["idle_b_"].push_back(m_texture.copy(0,0*TSH, TSW,2*TSH)
-                                             .scaled(TS, 2*TH));
+                                                .scaled(TS, 2*TH));
     m_animator.m_mapStates["idle_b__f_"].push_back(m_texture.copy(0,0*TSH, TSW,2*TSH)
-                                             .scaled(TS, 2*TH).transformed(QTransform().scale(-1,1)));
+                                                   .scaled(TS, 2*TH).transformed(QTransform().scale(-1,1)));
     //2 0 1frame
     m_animator.m_mapStates["jump_b_"].push_back(m_texture.copy(2*TSW,0*TSH, TSW,2*TSH)
-                                             .scaled(TS, 2*TH));
+                                                .scaled(TS, 2*TH));
     m_animator.m_mapStates["jump_b__f_"].push_back(m_texture.copy(2*TSW,0*TSH, TSW,2*TSH)
-                                             .scaled(TS, 2*TH).transformed(QTransform().scale(-1,1)));
+                                                   .scaled(TS, 2*TH).transformed(QTransform().scale(-1,1)));
 
     //0 4 3frames
     m_animator.m_mapStates["run_b_"].push_back(m_texture.copy(4*TSW,0*TSH, TSW,2*TSH)
-                                            .scaled(TS, 2*TH));
+                                               .scaled(TS, 2*TH));
     m_animator.m_mapStates["run_b_"].push_back(m_texture.copy(5*TSW,0*TSH, TSW,2*TSH)
-                                            .scaled(TS, 2*TH));
+                                               .scaled(TS, 2*TH));
     m_animator.m_mapStates["run_b_"].push_back(m_texture.copy(6*TSW,0*TSH, TSW,2*TSH)
-                                            .scaled(TS, 2*TH));
+                                               .scaled(TS, 2*TH));
 
     m_animator.m_mapStates["run_b__f_"].push_back(m_texture.copy(4*TSW,0*TSH, TSW,TSH)
-                                            .scaled(TS, 2*TH).transformed(QTransform().scale(-1,1)));
+                                                  .scaled(TS, 2*TH).transformed(QTransform().scale(-1,1)));
     m_animator.m_mapStates["run_b__f_"].push_back(m_texture.copy(5*TSW,0*TSH, TSW,TSH)
-                                            .scaled(TS, 2*TH).transformed(QTransform().scale(-1,1)));
+                                                  .scaled(TS, 2*TH).transformed(QTransform().scale(-1,1)));
     m_animator.m_mapStates["run_b__f_"].push_back(m_texture.copy(6*TSW,0*TSH, TSW,TSH)
-                                            .scaled(TS, 2*TH).transformed(QTransform().scale(-1,1)));
+                                                  .scaled(TS, 2*TH).transformed(QTransform().scale(-1,1)));
     m_animator.changeState("idle");
     m_animator.m_timeBetweenFrames = 0.25f;
 }
@@ -114,6 +114,7 @@ void Mario::update(float elapsedTime)
 
 void Mario::update(float elapsedTime, GameScene &scene)
 {
+
     if(scene.keys(Qt::Key_A)->m_held)
     {
         //in air mario is less control(0.75) than on ground
@@ -140,7 +141,8 @@ void Mario::update(float elapsedTime, GameScene &scene)
     }
     if(scene.keys(Qt::Key_Z)->m_released)
     {
-        if (m_onGround)
+        //m_velocityY < std::fabs(1.f) <= read value is before gravity works
+        if (m_onGround && !int(m_velocityY))
         {
             m_velocityY = -JUMP_SPEED * elapsedTime;
             //nDirModX = 1;
@@ -148,12 +150,12 @@ void Mario::update(float elapsedTime, GameScene &scene)
     }
     else
     {
-        //        if (m_velocityY != 0)
-        //        {
-        //            if(m_velocityY < 0.0f)
-        //                m_velocityY = 0.0f;
-        //            //nDirModX = 0;
-        //        }
+//        if (m_velocityY != 0)
+//        {
+//            if(m_velocityY < 0.0f)
+//                m_velocityY = 0.0f;
+//            //nDirModX = 0;
+//        }
     }
     update(elapsedTime);
     m_animator.update(elapsedTime);
