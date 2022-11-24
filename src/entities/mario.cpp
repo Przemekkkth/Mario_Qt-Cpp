@@ -35,6 +35,32 @@ Mario::Mario()
                                             .scaled(GLOBAL::TILE_SIZE.width(), GLOBAL::TILE_SIZE.height()).transformed(QTransform().scale(-1,1)));
     m_animator.m_mapStates["run_f_"].push_back(m_texture.copy(6*GLOBAL::MARIO_TEXTURE_SIZE.width(),4*GLOBAL::MARIO_TEXTURE_SIZE.width(), GLOBAL::MARIO_TEXTURE_SIZE.width(),GLOBAL::MARIO_TEXTURE_SIZE.width())
                                             .scaled(GLOBAL::TILE_SIZE.width(), GLOBAL::TILE_SIZE.height()).transformed(QTransform().scale(-1,1)));
+///////////////////////////BIG//////////////////////
+    //0 0  1frame
+    m_animator.m_mapStates["idle_b_"].push_back(m_texture.copy(0,0*GLOBAL::MARIO_TEXTURE_SIZE.height(), GLOBAL::MARIO_TEXTURE_SIZE.width(),2*GLOBAL::MARIO_TEXTURE_SIZE.height())
+                                             .scaled(GLOBAL::TILE_SIZE.width(), 2*GLOBAL::TILE_SIZE.height()));
+    m_animator.m_mapStates["idle_b__f_"].push_back(m_texture.copy(0,0*GLOBAL::MARIO_TEXTURE_SIZE.height(), GLOBAL::MARIO_TEXTURE_SIZE.width(),2*GLOBAL::MARIO_TEXTURE_SIZE.height())
+                                             .scaled(GLOBAL::TILE_SIZE.width(), 2*GLOBAL::TILE_SIZE.height()).transformed(QTransform().scale(-1,1)));
+    //2 0 1frame
+    m_animator.m_mapStates["jump_b_"].push_back(m_texture.copy(2*GLOBAL::MARIO_TEXTURE_SIZE.width(),0*GLOBAL::MARIO_TEXTURE_SIZE.height(), GLOBAL::MARIO_TEXTURE_SIZE.width(),2*GLOBAL::MARIO_TEXTURE_SIZE.height())
+                                             .scaled(GLOBAL::TILE_SIZE.width(), 2*GLOBAL::TILE_SIZE.height()));
+    m_animator.m_mapStates["jump_b__f_"].push_back(m_texture.copy(2*GLOBAL::MARIO_TEXTURE_SIZE.width(),0*GLOBAL::MARIO_TEXTURE_SIZE.height(), GLOBAL::MARIO_TEXTURE_SIZE.width(),2*GLOBAL::MARIO_TEXTURE_SIZE.height())
+                                             .scaled(GLOBAL::TILE_SIZE.width(), 2*GLOBAL::TILE_SIZE.height()).transformed(QTransform().scale(-1,1)));
+
+    //0 4 3frames
+    m_animator.m_mapStates["run_b_"].push_back(m_texture.copy(4*GLOBAL::MARIO_TEXTURE_SIZE.width(),0*GLOBAL::MARIO_TEXTURE_SIZE.height(), GLOBAL::MARIO_TEXTURE_SIZE.width(),2*GLOBAL::MARIO_TEXTURE_SIZE.height())
+                                            .scaled(GLOBAL::TILE_SIZE.width(), 2*GLOBAL::TILE_SIZE.height()));
+    m_animator.m_mapStates["run_b_"].push_back(m_texture.copy(5*GLOBAL::MARIO_TEXTURE_SIZE.width(),0*GLOBAL::MARIO_TEXTURE_SIZE.height(), GLOBAL::MARIO_TEXTURE_SIZE.width(),2*GLOBAL::MARIO_TEXTURE_SIZE.height())
+                                            .scaled(GLOBAL::TILE_SIZE.width(), 2*GLOBAL::TILE_SIZE.height()));
+    m_animator.m_mapStates["run_b_"].push_back(m_texture.copy(6*GLOBAL::MARIO_TEXTURE_SIZE.width(),0*GLOBAL::MARIO_TEXTURE_SIZE.height(), GLOBAL::MARIO_TEXTURE_SIZE.width(),2*GLOBAL::MARIO_TEXTURE_SIZE.height())
+                                            .scaled(GLOBAL::TILE_SIZE.width(), 2*GLOBAL::TILE_SIZE.height()));
+
+    m_animator.m_mapStates["run_b__f_"].push_back(m_texture.copy(4*GLOBAL::MARIO_TEXTURE_SIZE.width(),0*GLOBAL::MARIO_TEXTURE_SIZE.width(), GLOBAL::MARIO_TEXTURE_SIZE.width(),GLOBAL::MARIO_TEXTURE_SIZE.width())
+                                            .scaled(GLOBAL::TILE_SIZE.width(), 2*GLOBAL::TILE_SIZE.height()).transformed(QTransform().scale(-1,1)));
+    m_animator.m_mapStates["run_b__f_"].push_back(m_texture.copy(5*GLOBAL::MARIO_TEXTURE_SIZE.width(),0*GLOBAL::MARIO_TEXTURE_SIZE.width(), GLOBAL::MARIO_TEXTURE_SIZE.width(),GLOBAL::MARIO_TEXTURE_SIZE.width())
+                                            .scaled(GLOBAL::TILE_SIZE.width(), 2*GLOBAL::TILE_SIZE.height()).transformed(QTransform().scale(-1,1)));
+    m_animator.m_mapStates["run_b__f_"].push_back(m_texture.copy(6*GLOBAL::MARIO_TEXTURE_SIZE.width(),0*GLOBAL::MARIO_TEXTURE_SIZE.width(), GLOBAL::MARIO_TEXTURE_SIZE.width(),GLOBAL::MARIO_TEXTURE_SIZE.width())
+                                            .scaled(GLOBAL::TILE_SIZE.width(), 2*GLOBAL::TILE_SIZE.height()).transformed(QTransform().scale(-1,1)));
     m_animator.changeState("idle");
     m_animator.m_timeBetweenFrames = 0.25f;
 }
@@ -249,5 +275,14 @@ void Mario::checkCollisionWithBlocks()
 
 QRectF Mario::hitBox()
 {
-    return QRectF(position().x(), position().y(), GLOBAL::TILE_SIZE.width(), GLOBAL::TILE_SIZE.height());
+    float height;
+    if(m_big)
+    {
+        height = 2*GLOBAL::TILE_SIZE.height();
+    }
+    else
+    {
+        height = GLOBAL::TILE_SIZE.height();
+    }
+    return QRectF(position().x(), position().y(), GLOBAL::TILE_SIZE.width(), height);
 }
