@@ -52,6 +52,7 @@ void GameScene::loop()
         }
 //draw
         clear();
+        setBackgroundBrush(QBrush(QColor(0, 219, 255)));
         m_mapManager.drawBackground(getCameraX(*m_mario), *this);
         m_mapManager.drawForeground(getCameraX(*m_mario), *this);
         m_mario->draw(*this);
