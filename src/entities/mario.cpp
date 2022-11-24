@@ -27,7 +27,7 @@ Mario::Mario()
     m_animator.m_mapStates["small_brake"].push_back(m_texture.copy(1*GLOBAL::MARIO_TEXTURE_SIZE.width(),4*GLOBAL::MARIO_TEXTURE_SIZE.width(), GLOBAL::MARIO_TEXTURE_SIZE.width(),GLOBAL::MARIO_TEXTURE_SIZE.width())
                                                    .scaled(GLOBAL::TILE_SIZE.width(), GLOBAL::TILE_SIZE.height()));
 
-    m_animator.changeState("small_run");
+    m_animator.changeState("small_brake");
     m_animator.m_timeBetweenFrames = 0.25f;
 }
 
@@ -54,6 +54,20 @@ void Mario::update(float elapsedTime)
     clampVelocities(elapsedTime);
     checkCollisionWithBlocks();
     setPosition(int(position().x() + m_velocityX), int(position().y() + m_velocityY));
+
+    qDebug() << "m_velocityX " << m_velocityX;
+    // Set Animation
+    if(m_onGround && std::fabs(m_velocityX) > 1.f)
+    {
+        m_animator.changeState("small_run");
+    }
+    if(m_onGround && std::fabs(m_velocityX) < 0.5f)
+    {
+        m_animator.changeState("small_idle");
+    }
+    if(!m_onGround){
+        m_animator.changeState("small_jump");
+    }
 }
 
 void Mario::update(float elapsedTime, GameScene &scene)
