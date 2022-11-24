@@ -5,16 +5,37 @@
 Mario::Mario()
     : m_velocityX(0.0f), m_velocityY(0.0f), m_onGround(false), m_runMode(false)
 {
+    m_texture = QPixmap(":/res/mario_items_18x18.png");
     m_pixmap = QPixmap(":/res/mario_items_18x18.png")
             .copy(0,4*GLOBAL::MARIO_TEXTURE_SIZE.width(), GLOBAL::MARIO_TEXTURE_SIZE.width(),GLOBAL::MARIO_TEXTURE_SIZE.width())
             .scaled(GLOBAL::TILE_SIZE.width(), GLOBAL::TILE_SIZE.height());
+
+    //0 4 1frame
+    m_animator.m_mapStates["small_idle"].push_back(m_texture.copy(0,4*GLOBAL::MARIO_TEXTURE_SIZE.width(), GLOBAL::MARIO_TEXTURE_SIZE.width(),GLOBAL::MARIO_TEXTURE_SIZE.width())
+                                                   .scaled(GLOBAL::TILE_SIZE.width(), GLOBAL::TILE_SIZE.height()));
+    //2 4 1frame
+    m_animator.m_mapStates["small_jump"].push_back(m_texture.copy(2*GLOBAL::MARIO_TEXTURE_SIZE.width(),4*GLOBAL::MARIO_TEXTURE_SIZE.width(), GLOBAL::MARIO_TEXTURE_SIZE.width(),GLOBAL::MARIO_TEXTURE_SIZE.width())
+                                                   .scaled(GLOBAL::TILE_SIZE.width(), GLOBAL::TILE_SIZE.height()));
+    //4 4 3frames
+    m_animator.m_mapStates["small_run"].push_back(m_texture.copy(4*GLOBAL::MARIO_TEXTURE_SIZE.width(),4*GLOBAL::MARIO_TEXTURE_SIZE.width(), GLOBAL::MARIO_TEXTURE_SIZE.width(),GLOBAL::MARIO_TEXTURE_SIZE.width())
+                                                   .scaled(GLOBAL::TILE_SIZE.width(), GLOBAL::TILE_SIZE.height()));
+    m_animator.m_mapStates["small_run"].push_back(m_texture.copy(5*GLOBAL::MARIO_TEXTURE_SIZE.width(),4*GLOBAL::MARIO_TEXTURE_SIZE.width(), GLOBAL::MARIO_TEXTURE_SIZE.width(),GLOBAL::MARIO_TEXTURE_SIZE.width())
+                                                   .scaled(GLOBAL::TILE_SIZE.width(), GLOBAL::TILE_SIZE.height()));
+    m_animator.m_mapStates["small_run"].push_back(m_texture.copy(6*GLOBAL::MARIO_TEXTURE_SIZE.width(),4*GLOBAL::MARIO_TEXTURE_SIZE.width(), GLOBAL::MARIO_TEXTURE_SIZE.width(),GLOBAL::MARIO_TEXTURE_SIZE.width())
+                                                   .scaled(GLOBAL::TILE_SIZE.width(), GLOBAL::TILE_SIZE.height()));
+    //1 4 1frame
+    m_animator.m_mapStates["small_brake"].push_back(m_texture.copy(1*GLOBAL::MARIO_TEXTURE_SIZE.width(),4*GLOBAL::MARIO_TEXTURE_SIZE.width(), GLOBAL::MARIO_TEXTURE_SIZE.width(),GLOBAL::MARIO_TEXTURE_SIZE.width())
+                                                   .scaled(GLOBAL::TILE_SIZE.width(), GLOBAL::TILE_SIZE.height()));
+
+    m_animator.changeState("small_run");
+    m_animator.m_timeBetweenFrames = 0.25f;
 }
 
 void Mario::draw(GameScene &scene)
 {
     QGraphicsPixmapItem* pItem = new QGraphicsPixmapItem();
     pItem->setPos(int(position().x()), int(position().y()));
-    pItem->setPixmap(m_pixmap);
+    pItem->setPixmap(m_animator.pixmap());
     scene.addItem(pItem);
 }
 
@@ -79,6 +100,7 @@ void Mario::update(float elapsedTime, GameScene &scene)
 //        }
     }
     update(elapsedTime);
+    m_animator.update(elapsedTime);
 }
 
 void Mario::clampVelocities(float elapsedTime)

@@ -50,6 +50,7 @@ void GameScene::loop()
         {
             Block::BLOCKS.at(i)->update(elapsedTime);
         }
+
 //draw
         clear();
         setBackgroundBrush(QBrush(QColor(0, 219, 255)));

@@ -2,6 +2,7 @@
 #define MARIO_H
 #include "../gamescene.h"
 #include "entity.h"
+#include "../utils/animator.h"
 #include <QPixmap>
 
 class Block;
@@ -23,11 +24,12 @@ public:
 private:
     void clampVelocities(float elapsedTime);
     void checkCollisionWithBlocks();
+    void collideWithBlock(Block *block);
     QRectF hitBox();
-    QPixmap m_pixmap;
+    QPixmap m_pixmap, m_texture;
     float m_velocityX, m_velocityY;
     bool m_onGround, m_runMode;
-    void collideWithBlock(Block *block);
+    Animator m_animator;
 };
 
 #endif // MARIO_H
