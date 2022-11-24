@@ -4,6 +4,7 @@
 #include "entity.h"
 #include <QPixmap>
 
+class Block;
 class GameScene;
 class Mario : public Entity {
 public:
@@ -26,6 +27,7 @@ private:
     QPixmap m_pixmap;
     float m_velocityX, m_velocityY;
     bool m_onGround, m_runMode;
+    void collideWithBlock(Block *block);
 };
 
 #endif // MARIO_H

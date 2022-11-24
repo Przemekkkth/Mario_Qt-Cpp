@@ -2,6 +2,7 @@
 #include <QGraphicsPixmapItem>
 #include "../gamescene.h"
 #include "../entities/block.h"
+#include "../entities/questionblock.h"
 
 const QMap<QRgb, QPoint> MapManager::colorToPointOfSpriteMap={
     {qRgb(146, 219, 0  ), QPoint(5 , 0 )},
@@ -23,16 +24,16 @@ const QMap<QRgb, QPoint> MapManager::colorToPointOfSpriteMap={
 
 const QMap<QRgb, GLOBAL::CELL_TYPE> MapManager::colorToCellMap=
 {
-    {qRgb(182, 73 ,   0), GLOBAL::CELL_TYPE::Brick         },
-    {qRgb(255, 255,   0), GLOBAL::CELL_TYPE::Coin          },
-    {qRgb(0  , 146,   0), GLOBAL::CELL_TYPE::TopLeftPipe0  },
-    {qRgb(0  , 182,   0), GLOBAL::CELL_TYPE::LeftPipe0     },
-    {qRgb(0  , 160,   0), GLOBAL::CELL_TYPE::TopRightPipe0 },
-    {qRgb(0  , 200,   0), GLOBAL::CELL_TYPE::RightPipe0    },
-    {qRgb(255, 73 ,  85), GLOBAL::CELL_TYPE::QuestionBlock },
-    {qRgb(255, 146,  85), GLOBAL::CELL_TYPE::QuestionBlock },
-    {qRgb(  0,   0,   0), GLOBAL::CELL_TYPE::Wall0         },
-    {qRgb(146,  73,   0), GLOBAL::CELL_TYPE::Wall1         }
+    {qRgb(182, 73 ,   0), GLOBAL::CELL_TYPE::Brick                  },
+    {qRgb(255, 255,   0), GLOBAL::CELL_TYPE::Coin                   },
+    {qRgb(0  , 146,   0), GLOBAL::CELL_TYPE::TopLeftPipe0           },
+    {qRgb(0  , 182,   0), GLOBAL::CELL_TYPE::LeftPipe0              },
+    {qRgb(0  , 160,   0), GLOBAL::CELL_TYPE::TopRightPipe0          },
+    {qRgb(0  , 200,   0), GLOBAL::CELL_TYPE::RightPipe0             },
+    {qRgb(255, 73 ,  85), GLOBAL::CELL_TYPE::ActivatedQuestionBlock },
+    {qRgb(255, 146,  85), GLOBAL::CELL_TYPE::ActivatedQuestionBlock },
+    {qRgb(  0,   0,   0), GLOBAL::CELL_TYPE::Wall0                  },
+    {qRgb(146,  73,   0), GLOBAL::CELL_TYPE::Wall1                  }
 };
 
 const QMap<GLOBAL::CELL_TYPE, QPoint> MapManager::cellToPointOfSpriteMap=
@@ -75,112 +76,7 @@ int MapManager::getMapWidth() const
 
 void MapManager::drawMap(const bool drawBackground, const bool underground, const unsigned view_x, GameScene &scene)
 {
-    //    unsigned short map_end = ceil((Const::SCREEN_WIDTH + view_x) / static_cast<float>(Const::CELL_SIZE));
-    //    unsigned short map_height = floor(m_mapSketch.height() / 3.f);
-    //    unsigned short map_start = floor(view_x / static_cast<float>(Const::CELL_SIZE));
 
-    //    //We're drawing the coin before drawing the blocks because we want it to appear behind the question block.
-    //    if (!drawBackground)
-    //    {
-    //        for (const Object& questionBlockCoin : m_questionBlockCoins)
-    //        {
-    //            m_coinAnimation.setPosition(questionBlockCoin.m_x, questionBlockCoin.m_y);
-    //            m_coinAnimation.draw(scene);
-    //        }
-    //    }
-
-    //    for (unsigned short a = map_start; a < map_end; a++)
-    //    {
-    //        for (unsigned short b = 0; b < map_height; b++)
-    //        {
-    //            unsigned short sprite_x = 0;
-    //            unsigned short sprite_y = 0;
-
-
-    //            //This code is a big mess.
-    //            //But it works.
-    //            //Keep that in mind before judging me.
-    //            if (drawBackground)
-    //            {
-    //                QColor pixel = m_mapSketch.pixelColor(a, b + 2 * map_height);
-    //                QRgb pixelRGB = m_mapSketch.pixel(a, b + 2 * map_height);
-    //                if (255 == pixel.alpha())
-    //                {
-    //                    if(colorToPointOfSpriteMap.contains(pixelRGB))
-    //                    {
-    //                        sprite_x = colorToPointOfSpriteMap[pixelRGB].x();
-    //                        sprite_y = colorToPointOfSpriteMap[pixelRGB].y();
-    //                    }
-
-    //                    QGraphicsPixmapItem* pItem = new QGraphicsPixmapItem();
-    //                    pItem->setPos(Const::SCREEN_RESIZE*Const::CELL_SIZE * a, Const::SCREEN_RESIZE*Const::CELL_SIZE * b);
-    //                    //cell_sprite.setTextureRect(sf::IntRect(CELL_SIZE * sprite_x, CELL_SIZE * sprite_y, CELL_SIZE, CELL_SIZE));
-    //                    pItem->setPixmap(m_cellSprite.copy(QRect(Const::CELL_SIZE*sprite_x, Const::CELL_SIZE*sprite_y, Const::CELL_SIZE, Const::CELL_SIZE)).scaled(Const::SCREEN_RESIZE*Const::CELL_SIZE, Const::SCREEN_RESIZE*Const::CELL_SIZE));
-    //                    scene.addItem(pItem);
-    //                    //i_window.draw(cell_sprite);
-    //                }
-    //            }
-    //            else if (Const::CELL::Empty != m_map[a][b])
-    //            {
-    //                if(animatedCells.contains(m_map[a][b]))
-    //                {
-    //                    if (Const::CELL::Coin == m_map[a][b])
-    //                    {
-    //                        m_coinAnimation.setPosition(Const::CELL_SIZE * a, Const::CELL_SIZE * b);
-    //                        m_coinAnimation.draw(scene);
-    //                        ///m_coinAnimation.draw(i_window);
-    //                    }
-    //                    else if (Const::CELL::QuestionBlock == m_map[a][b])
-    //                    {
-    //                        m_questionBlockAnimation.setPosition(Const::CELL_SIZE * a, Const::CELL_SIZE * b);
-    //                        m_questionBlockAnimation.draw(scene);
-    //                    }
-    //                }
-    //                else
-    //                {
-    //                    //Since the underground blocks have a different look, I placed their texture 2 cells below the regular ones in the map texture.
-    //                    sprite_y = 2 * underground;
-
-    //                    if (Const::CELL::ActivatedQuestionBlock == m_map[a][b])
-    //                    {
-    //                        sprite_x = 6;
-    //                        sprite_y++;
-    //                    }
-    //                    //cell_sprite.setTextureRect(sf::IntRect(CELL_SIZE * sprite_x, CELL_SIZE * sprite_y, CELL_SIZE, CELL_SIZE));
-    //                    if(cellToPointOfSpriteMap.contains(m_map[a][b]))
-    //                    {
-    //                        if(cellToPointOfSpriteMap[m_map[a][b]].x() == -1 && cellToPointOfSpriteMap[m_map[a][b]].y() == -1)
-    //                        {
-    //                            continue;
-    //                        }
-    //                        sprite_x = cellToPointOfSpriteMap[m_map[a][b]].x();
-    //                        sprite_y = cellToPointOfSpriteMap[m_map[a][b]].y();
-    //                    }
-    //                    QGraphicsPixmapItem* pItem = new QGraphicsPixmapItem();
-    //                    pItem->setPos(Const::SCREEN_RESIZE*Const::CELL_SIZE * a, Const::SCREEN_RESIZE*Const::CELL_SIZE * b);
-
-    //                    pItem->setPixmap(
-    //                                m_cellSprite.copy(QRect(Const::CELL_SIZE * sprite_x, Const::CELL_SIZE * sprite_y, Const::CELL_SIZE, Const::CELL_SIZE)).scaled(Const::SCREEN_RESIZE*Const::CELL_SIZE, Const::SCREEN_RESIZE*Const::CELL_SIZE));
-    //                    //i_window.draw(cell_sprite);
-    //                    scene.addItem(pItem);
-    //                }
-    //            }
-    //        }
-    //    }
-
-    //    //Drawing brick particles.
-    //    if (!drawBackground)
-    //    {
-    //        for (const Object& brickParticle : m_brickParticles)
-    //        {
-    //            QGraphicsPixmapItem* pItem = new QGraphicsPixmapItem();
-    //            pItem->setPos(brickParticle.m_x*Const::SCREEN_RESIZE, brickParticle.m_y*Const::SCREEN_RESIZE);
-    //            pItem->setPixmap(m_cellSprite.copy(QRect(0.25f * Const::CELL_SIZE, Const::CELL_SIZE * (0.25f + 2 * underground), 0.5f * Const::CELL_SIZE, 0.5f * Const::CELL_SIZE)).scaled(Const::SCREEN_RESIZE*Const::CELL_SIZE, Const::SCREEN_RESIZE*Const::CELL_SIZE));
-    //            //cell_sprite.setTextureRect(sf::IntRect(0.25f * CELL_SIZE, CELL_SIZE * (0.25f + 2 * i_underground), 0.5f * CELL_SIZE, 0.5f * CELL_SIZE));
-    //            //i_window.draw(cell_sprite);
-    //            scene.addItem(pItem);
-    //        }
-    //    }
 }
 
 void MapManager::drawBackground(int cameraX, GameScene &scene)
@@ -304,15 +200,27 @@ void MapManager::convertFromSketch(int currentLevel)
         }
     }
 
-
     //Create Static blocks
     for(int x = 0; x < m_map.size(); ++x)
     {
         for(int y = 0; y < int(m_map.at(0).size()); ++y)
         {
-            if(cellToPointOfSpriteMap.contains(m_map[x][y]) )
+            if(cellToPointOfSpriteMap.contains(m_map[x][y]) && m_map[x][y] != GLOBAL::ActivatedQuestionBlock)
             {
                 Block::CreateBlock(m_map[x][y], QPointF(x * GLOBAL::TILE_SIZE.width(), y * GLOBAL::TILE_SIZE.height()));
+            }
+        }
+    }
+
+    //Create Animated blocks
+    for(int x = 0; x < m_map.size(); ++x)
+    {
+        for(int y = 0; y < int(m_map.at(0).size()); ++y)
+        {
+            if(m_map[x][y] == GLOBAL::ActivatedQuestionBlock)
+            {
+                //Block::CreateBlock(m_map[x][y], QPointF(x * GLOBAL::TILE_SIZE.width(), y * GLOBAL::TILE_SIZE.height()));
+                QuestionBlock::CreateQuestionBlock(QPointF(x * GLOBAL::TILE_SIZE.width(), y * GLOBAL::TILE_SIZE.height()));
             }
         }
     }

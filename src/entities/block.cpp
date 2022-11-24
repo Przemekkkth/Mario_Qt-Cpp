@@ -29,6 +29,14 @@ void Block::CreateBlock(GLOBAL::CELL_TYPE cType, QPointF mapPosition)
     block->setPosition(mapPosition);
 }
 
+void Block::UpdateBlocks(float elapsedTime)
+{
+    foreach(Block* block, BLOCKS)
+    {
+        block->update(elapsedTime);
+    }
+}
+
 void Block::setPixmap(const QPixmap &pixmap)
 {
     m_pixmap = pixmap;
@@ -61,4 +69,9 @@ void Block::draw(GameScene &scene)
     pItem->setPixmap(pixmap());
     pItem->setPos(position());
     scene.addItem(pItem);
+}
+
+void Block::update(float)
+{
+
 }

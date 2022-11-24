@@ -3,6 +3,7 @@
 #include <QGraphicsSceneMouseEvent>
 #include <QDebug>
 #include "entities/mario.h"
+#include "entities/questionblock.h"
 
 GameScene::GameScene(QObject *parent)
     : QGraphicsScene(parent), m_loopSpeed(int(1000.0f/GLOBAL::FPS)),
@@ -45,9 +46,13 @@ void GameScene::loop()
         handlePlayerInput();
         m_mario->update(elapsedTime, *this);
 //update
+        for(int i = 0; i < Block::BLOCKS.size(); ++i)
+        {
+            Block::BLOCKS.at(i)->update(elapsedTime);
+        }
 //draw
         clear();
-        m_mapManager.drawBackground(getCameraX(*m_mario),*this);
+        m_mapManager.drawBackground(getCameraX(*m_mario), *this);
         m_mapManager.drawForeground(getCameraX(*m_mario), *this);
         m_mario->draw(*this);
         setSceneRect(getCameraX(*m_mario), 0, GLOBAL::SCREEN_SIZE.width(), GLOBAL::SCREEN_SIZE.height());

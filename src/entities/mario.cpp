@@ -112,59 +112,66 @@ void Mario::clampVelocities(float elapsedTime)
     //    }
 }
 
-void Mario::checkCollisionWithBlocks()
+void Mario::collideWithBlock(Block* block)
 {
     // Calculate potential new position
     float CollideX;
     float CollideY;
     float shrinkPixel = 5.f, shrinkFactor = 0.9f;//For one tile row, column to avoid block
 
+//X-axis
+    if (m_velocityX <= 0.0f) // Moving Left
+    {
+        CollideX = position().x() + m_velocityX;
+        if(block->hitBox().contains(CollideX, position().y())
+                ||
+           block->hitBox().contains(CollideX, position().y()+hitBox().height()))
+        {
+            m_velocityX = 0.0f;
+        }
+    }
+    else // Moving Right
+    {
+        CollideX = position().x() + hitBox().width() + m_velocityX;
+        if(block->hitBox().contains(CollideX, position().y())
+                ||
+           block->hitBox().contains(CollideX, position().y()+hitBox().height()))
+        {
+            m_velocityX = 0.0f;
+        }
+    }
+//Y-axis
+    if (m_velocityY < 0.0f) // Moving Up
+    {
+        m_onGround = false;
+        CollideY = position().y() + m_velocityY;
+        if(block->hitBox().contains(position().x()+shrinkPixel, CollideY)
+                ||
+           block->hitBox().contains(position().x()+shrinkFactor*hitBox().width() , CollideY))
+        {
+            m_velocityY = 0.1f;
+        }
+    }
+    else // Moving Down
+    {
+        CollideY = position().y() + hitBox().height() + m_velocityY;
+        if(block->hitBox().contains(position().x()+shrinkPixel, CollideY)
+                ||
+           block->hitBox().contains(position().x()+shrinkFactor*hitBox().width() , CollideY))
+        {
+            m_velocityY = 0.0f;
+            m_onGround = true;
+        }
+    }
+}
+
+void Mario::checkCollisionWithBlocks()
+{
+
     for(int i = 0; i < Block::BLOCKS.size(); ++i)
     {
-//X-axis
-        if (m_velocityX <= 0.0f) // Moving Left
-        {
-            CollideX = position().x() + m_velocityX;
-            if(Block::BLOCKS.at(i)->hitBox().contains(CollideX, position().y())
-                    ||
-               Block::BLOCKS.at(i)->hitBox().contains(CollideX, position().y()+hitBox().height()))
-            {
-                m_velocityX = 0.0f;
-            }
-        }
-        else // Moving Right
-        {
-            CollideX = position().x() + hitBox().width() + m_velocityX;
-            if(Block::BLOCKS.at(i)->hitBox().contains(CollideX, position().y())
-                    ||
-               Block::BLOCKS.at(i)->hitBox().contains(CollideX, position().y()+hitBox().height()))
-            {
-                m_velocityX = 0.0f;
-            }
-        }
-//Y-axis
-        if (m_velocityY < 0.0f) // Moving Up
-        {
-            m_onGround = false;
-            CollideY = position().y() + m_velocityY;
-            if(Block::BLOCKS.at(i)->hitBox().contains(position().x()+shrinkPixel, CollideY)
-                    ||
-               Block::BLOCKS.at(i)->hitBox().contains(position().x()+shrinkFactor*hitBox().width() , CollideY))
-            {
-                m_velocityY = 0.1f;
-            }
-        }
-        else // Moving Down
-        {
-            CollideY = position().y() + hitBox().height() + m_velocityY;
-            if(Block::BLOCKS.at(i)->hitBox().contains(position().x()+shrinkPixel, CollideY)
-                    ||
-               Block::BLOCKS.at(i)->hitBox().contains(position().x()+shrinkFactor*hitBox().width() , CollideY))
-            {
-                m_velocityY = 0.0f;
-                m_onGround = true;
-            }
-        }
+
+        collideWithBlock(Block::BLOCKS.at(i));
     }
 }
 

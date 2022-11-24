@@ -9,6 +9,7 @@ public:
     ~Block();
     static QList<Block*> BLOCKS;
     static void CreateBlock(GLOBAL::CELL_TYPE cType, QPointF mapPosition);
+    static void UpdateBlocks(float elapsedTime);
     void setPixmap(const QPixmap& pixmap);
     QPixmap pixmap() const;
     QRectF hitBox();
@@ -22,6 +23,7 @@ private:
     // Entity interface
 public:
     virtual void draw(GameScene &scene) override;
+    virtual void update(float elapsedTime) override;
 };
 
 #endif // BLOCK_H
