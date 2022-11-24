@@ -1,5 +1,6 @@
 #include "mario.h"
 #include "block.h"
+#include "questionblock.h"
 #include <QGraphicsPixmapItem>
 
 
@@ -226,6 +227,11 @@ void Mario::collideWithBlock(Block* block)
                 ||
                 block->hitBox().contains(position().x()+shrinkFactor*hitBox().width() , CollideY))
         {
+            QuestionBlock* questionBlock = dynamic_cast<QuestionBlock*>(block);
+            if(questionBlock)
+            {
+                questionBlock->deactivate();
+            }
             m_velocityY = 0.1f;
         }
     }

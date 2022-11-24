@@ -17,10 +17,9 @@ enum CELL_TYPE{
     LeftPipe0,
     TopRightPipe0,
     RightPipe0,
-    QuestionBlock,
     Wall0,
     Wall1,
-    ActivatedQuestionBlock
+    QuestionBlock
 };
 
 static QString cellTypeToString(CELL_TYPE t)
