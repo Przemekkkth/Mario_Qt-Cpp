@@ -3,7 +3,7 @@
 #include <QGraphicsPixmapItem>
 
 Mario::Mario()
-    : m_brake(false), m_big(false), m_fliped(false), m_velocityX(0.0f), m_velocityY(0.0f), m_onGround(false), m_runMode(false)
+    : m_big(false), m_fliped(false), m_velocityX(0.0f), m_velocityY(0.0f), m_onGround(false), m_runMode(false)
 {
     m_texture = QPixmap(":/res/mario_items_18x18.png");
     m_pixmap = QPixmap(":/res/mario_items_18x18.png")
@@ -11,23 +11,31 @@ Mario::Mario()
             .scaled(GLOBAL::TILE_SIZE.width(), GLOBAL::TILE_SIZE.height());
 
     //0 4 1frame
-    m_animator.m_mapStates["small_idle"].push_back(m_texture.copy(0,4*GLOBAL::MARIO_TEXTURE_SIZE.width(), GLOBAL::MARIO_TEXTURE_SIZE.width(),GLOBAL::MARIO_TEXTURE_SIZE.width())
-                                                   .scaled(GLOBAL::TILE_SIZE.width(), GLOBAL::TILE_SIZE.height()));
-    //2 4 1frame
-    m_animator.m_mapStates["small_jump"].push_back(m_texture.copy(2*GLOBAL::MARIO_TEXTURE_SIZE.width(),4*GLOBAL::MARIO_TEXTURE_SIZE.width(), GLOBAL::MARIO_TEXTURE_SIZE.width(),GLOBAL::MARIO_TEXTURE_SIZE.width())
-                                                   .scaled(GLOBAL::TILE_SIZE.width(), GLOBAL::TILE_SIZE.height()));
-    //4 4 3frames
-    m_animator.m_mapStates["small_run"].push_back(m_texture.copy(4*GLOBAL::MARIO_TEXTURE_SIZE.width(),4*GLOBAL::MARIO_TEXTURE_SIZE.width(), GLOBAL::MARIO_TEXTURE_SIZE.width(),GLOBAL::MARIO_TEXTURE_SIZE.width())
-                                                  .scaled(GLOBAL::TILE_SIZE.width(), GLOBAL::TILE_SIZE.height()));
-    m_animator.m_mapStates["small_run"].push_back(m_texture.copy(5*GLOBAL::MARIO_TEXTURE_SIZE.width(),4*GLOBAL::MARIO_TEXTURE_SIZE.width(), GLOBAL::MARIO_TEXTURE_SIZE.width(),GLOBAL::MARIO_TEXTURE_SIZE.width())
-                                                  .scaled(GLOBAL::TILE_SIZE.width(), GLOBAL::TILE_SIZE.height()));
-    m_animator.m_mapStates["small_run"].push_back(m_texture.copy(6*GLOBAL::MARIO_TEXTURE_SIZE.width(),4*GLOBAL::MARIO_TEXTURE_SIZE.width(), GLOBAL::MARIO_TEXTURE_SIZE.width(),GLOBAL::MARIO_TEXTURE_SIZE.width())
-                                                  .scaled(GLOBAL::TILE_SIZE.width(), GLOBAL::TILE_SIZE.height()));
-    //1 4 1frame
-    m_animator.m_mapStates["small_brake"].push_back(m_texture.copy(1*GLOBAL::MARIO_TEXTURE_SIZE.width(),4*GLOBAL::MARIO_TEXTURE_SIZE.width(), GLOBAL::MARIO_TEXTURE_SIZE.width(),GLOBAL::MARIO_TEXTURE_SIZE.width())
-                                                    .scaled(GLOBAL::TILE_SIZE.width(), GLOBAL::TILE_SIZE.height()));
+    m_animator.m_mapStates["idle"].push_back(m_texture.copy(0,4*GLOBAL::MARIO_TEXTURE_SIZE.width(), GLOBAL::MARIO_TEXTURE_SIZE.width(),GLOBAL::MARIO_TEXTURE_SIZE.width())
+                                             .scaled(GLOBAL::TILE_SIZE.width(), GLOBAL::TILE_SIZE.height()));
+    m_animator.m_mapStates["idle_f_"].push_back(m_texture.copy(0,4*GLOBAL::MARIO_TEXTURE_SIZE.width(), GLOBAL::MARIO_TEXTURE_SIZE.width(),GLOBAL::MARIO_TEXTURE_SIZE.width())
+                                             .scaled(GLOBAL::TILE_SIZE.width(), GLOBAL::TILE_SIZE.height()).transformed(QTransform().scale(-1,1)));
 
-    m_animator.changeState("small_brake");
+    //2 4 1frame
+    m_animator.m_mapStates["jump"].push_back(m_texture.copy(2*GLOBAL::MARIO_TEXTURE_SIZE.width(),4*GLOBAL::MARIO_TEXTURE_SIZE.width(), GLOBAL::MARIO_TEXTURE_SIZE.width(),GLOBAL::MARIO_TEXTURE_SIZE.width())
+                                             .scaled(GLOBAL::TILE_SIZE.width(), GLOBAL::TILE_SIZE.height()));
+    m_animator.m_mapStates["jump_f_"].push_back(m_texture.copy(2*GLOBAL::MARIO_TEXTURE_SIZE.width(),4*GLOBAL::MARIO_TEXTURE_SIZE.width(), GLOBAL::MARIO_TEXTURE_SIZE.width(),GLOBAL::MARIO_TEXTURE_SIZE.width())
+                                             .scaled(GLOBAL::TILE_SIZE.width(), GLOBAL::TILE_SIZE.height()).transformed(QTransform().scale(-1,1)));
+    //4 4 3frames
+    m_animator.m_mapStates["run"].push_back(m_texture.copy(4*GLOBAL::MARIO_TEXTURE_SIZE.width(),4*GLOBAL::MARIO_TEXTURE_SIZE.width(), GLOBAL::MARIO_TEXTURE_SIZE.width(),GLOBAL::MARIO_TEXTURE_SIZE.width())
+                                            .scaled(GLOBAL::TILE_SIZE.width(), GLOBAL::TILE_SIZE.height()));
+    m_animator.m_mapStates["run"].push_back(m_texture.copy(5*GLOBAL::MARIO_TEXTURE_SIZE.width(),4*GLOBAL::MARIO_TEXTURE_SIZE.width(), GLOBAL::MARIO_TEXTURE_SIZE.width(),GLOBAL::MARIO_TEXTURE_SIZE.width())
+                                            .scaled(GLOBAL::TILE_SIZE.width(), GLOBAL::TILE_SIZE.height()));
+    m_animator.m_mapStates["run"].push_back(m_texture.copy(6*GLOBAL::MARIO_TEXTURE_SIZE.width(),4*GLOBAL::MARIO_TEXTURE_SIZE.width(), GLOBAL::MARIO_TEXTURE_SIZE.width(),GLOBAL::MARIO_TEXTURE_SIZE.width())
+                                            .scaled(GLOBAL::TILE_SIZE.width(), GLOBAL::TILE_SIZE.height()));
+
+    m_animator.m_mapStates["run_f_"].push_back(m_texture.copy(4*GLOBAL::MARIO_TEXTURE_SIZE.width(),4*GLOBAL::MARIO_TEXTURE_SIZE.width(), GLOBAL::MARIO_TEXTURE_SIZE.width(),GLOBAL::MARIO_TEXTURE_SIZE.width())
+                                            .scaled(GLOBAL::TILE_SIZE.width(), GLOBAL::TILE_SIZE.height()).transformed(QTransform().scale(-1,1)));
+    m_animator.m_mapStates["run_f_"].push_back(m_texture.copy(5*GLOBAL::MARIO_TEXTURE_SIZE.width(),4*GLOBAL::MARIO_TEXTURE_SIZE.width(), GLOBAL::MARIO_TEXTURE_SIZE.width(),GLOBAL::MARIO_TEXTURE_SIZE.width())
+                                            .scaled(GLOBAL::TILE_SIZE.width(), GLOBAL::TILE_SIZE.height()).transformed(QTransform().scale(-1,1)));
+    m_animator.m_mapStates["run_f_"].push_back(m_texture.copy(6*GLOBAL::MARIO_TEXTURE_SIZE.width(),4*GLOBAL::MARIO_TEXTURE_SIZE.width(), GLOBAL::MARIO_TEXTURE_SIZE.width(),GLOBAL::MARIO_TEXTURE_SIZE.width())
+                                            .scaled(GLOBAL::TILE_SIZE.width(), GLOBAL::TILE_SIZE.height()).transformed(QTransform().scale(-1,1)));
+    m_animator.changeState("idle");
     m_animator.m_timeBetweenFrames = 0.25f;
 }
 
@@ -56,27 +64,18 @@ void Mario::update(float elapsedTime)
     setPosition(int(position().x() + m_velocityX), int(position().y() + m_velocityY));
 
     // Set Animation
+    setFliped();
     if(m_onGround && std::fabs(m_velocityX) > 1.f)
     {
-        setAnimatationState("small_run");
-        if(std::fabs(m_velocityX) > 0.95*MAX_MOVE_SPEED)
-        {
-            m_brake = false;
-        }
+        setAnimatationState("run");
+
     }
     if(m_onGround && std::fabs(m_velocityX) < 0.5f)
     {
-        if(m_brake)
-        {
-            setAnimatationState("small_brake");
-        }
-        else
-        {
-            setAnimatationState("small_idle");
-        }
+        setAnimatationState("idle");
     }
     if(!m_onGround){
-        setAnimatationState("small_jump");
+        setAnimatationState("jump");
     }
 }
 
@@ -91,10 +90,6 @@ void Mario::update(float elapsedTime, GameScene &scene)
         }
         else
         {
-            if(m_velocityX == +MAX_MOVE_SPEED * elapsedTime)
-            {
-                m_brake = true;
-            }
             m_velocityX += (m_onGround ? -MOVE_SPEED : -0.75*MOVE_SPEED) * elapsedTime;
         }
     }
@@ -107,10 +102,6 @@ void Mario::update(float elapsedTime, GameScene &scene)
         }
         else
         {
-            if(m_velocityX == -MAX_MOVE_SPEED * elapsedTime)
-            {
-                m_brake = true;
-            }
             m_velocityX += (m_onGround ? +MOVE_SPEED : +0.75*MOVE_SPEED) * elapsedTime;
         }
     }
@@ -232,6 +223,18 @@ void Mario::setAnimatationState(QString state)
         state += "_f_";
     }
     m_animator.changeState(state);
+}
+
+void Mario::setFliped()
+{
+    if(!m_fliped && m_velocityX < -.5f)
+    {
+        m_fliped = true;
+    }
+    else if(m_fliped && m_velocityX > .5f)
+    {
+        m_fliped = false;
+    }
 }
 
 void Mario::checkCollisionWithBlocks()
