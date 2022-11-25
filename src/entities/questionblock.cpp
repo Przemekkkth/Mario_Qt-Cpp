@@ -8,28 +8,7 @@ QuestionBlock::QuestionBlock()
     : m_activate(true), m_coinParticle(nullptr)
 {
     setCellType(GLOBAL::QuestionBlock);
-    setPixmap(QPixmap(":/res/map16x16.png"));
-    //x = 0, y = 3, 3frames left to right
-    m_animator.m_mapStates["blinking"].push_back(pixmap().copy(0 * GLOBAL::TEXTURE_SIZE.width(),
-                                                               3 * GLOBAL::TEXTURE_SIZE.height(),
-                                                               GLOBAL::TEXTURE_SIZE.width(),
-                                                               GLOBAL::TEXTURE_SIZE.height()).scaled(GLOBAL::TILE_SIZE.width(), GLOBAL::TILE_SIZE.height()));
-    m_animator.m_mapStates["blinking"].push_back(pixmap().copy(1 * GLOBAL::TEXTURE_SIZE.width(),
-                                                               3 * GLOBAL::TEXTURE_SIZE.height(),
-                                                               GLOBAL::TEXTURE_SIZE.width(),
-                                                               GLOBAL::TEXTURE_SIZE.height()).scaled(GLOBAL::TILE_SIZE.width(), GLOBAL::TILE_SIZE.height()));
-    m_animator.m_mapStates["blinking"].push_back(pixmap().copy(2 * GLOBAL::TEXTURE_SIZE.width(),
-                                                               3 * GLOBAL::TEXTURE_SIZE.height(),
-                                                               GLOBAL::TEXTURE_SIZE.width(),
-                                                               GLOBAL::TEXTURE_SIZE.height()).scaled(GLOBAL::TILE_SIZE.width(), GLOBAL::TILE_SIZE.height()));
-
-    m_animator.changeState("blinking");
-    m_animator.m_timeBetweenFrames = .5f;
-
-    m_deactivatePixmap = pixmap().copy(6 * GLOBAL::TEXTURE_SIZE.width(),
-                                       1 * GLOBAL::TEXTURE_SIZE.height(),
-                                       GLOBAL::TEXTURE_SIZE.width(),
-                                       GLOBAL::TEXTURE_SIZE.height()).scaled(GLOBAL::TILE_SIZE.width(), GLOBAL::TILE_SIZE.height());
+    createBlinkingAnimation();
     createCoinAnimation();
     QUESTION_BLOCKS.push_back(this);
 }
@@ -141,4 +120,36 @@ void QuestionBlock::createCoinAnimation()
     m_coinAnimation.m_mapStates["coin_spinning"].push_back(m_coinTexturePixmap.copy(9*TW, 0, TW, TH).scaled(TSW, TSH));
     m_coinAnimation.m_timeBetweenFrames = 0.1f;
     m_coinAnimation.changeState("coin_spinning");
+}
+
+void QuestionBlock::createBlinkingAnimation()
+{
+    setPixmap(QPixmap(":/res/map16x16.png"));
+    //x = 0, y = 3, 3frames left to right
+    const float TW  = GLOBAL::TEXTURE_SIZE.width();
+    const float TH  = GLOBAL::TEXTURE_SIZE.height();
+    const float TSW = GLOBAL::TILE_SIZE.width();
+    const float TSH = GLOBAL::TILE_SIZE.height();
+
+    m_animator.m_mapStates["blinking"].push_back(pixmap().copy(0 * TW,
+                                                               3 * TH,
+                                                               TW,
+                                                               TH).scaled(TSW, TSH));
+    m_animator.m_mapStates["blinking"].push_back(pixmap().copy(1 * TW,
+                                                               3 * TH,
+                                                               TW,
+                                                               TH).scaled(TSW, TSH));
+    m_animator.m_mapStates["blinking"].push_back(pixmap().copy(2 * TW,
+                                                               3 * TH,
+                                                               TW,
+                                                               TH).scaled(TSW, TSH));
+
+    m_animator.changeState("blinking");
+    m_animator.m_timeBetweenFrames = .5f;
+
+    m_deactivatePixmap = pixmap().copy(6 * TW,
+                                       1 * TH,
+                                       TW,
+                                       TH).scaled(TSW, TSH);
+
 }

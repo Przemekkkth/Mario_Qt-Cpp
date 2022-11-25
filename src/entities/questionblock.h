@@ -19,6 +19,7 @@ public:
 private:
     static QList<QuestionBlock*> QUESTION_BLOCKS;
     void createCoinAnimation();
+    void createBlinkingAnimation();
     Animator m_animator;
     bool m_activate;
     QPixmap m_deactivatePixmap, m_coinTexturePixmap;
