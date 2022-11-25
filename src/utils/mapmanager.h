@@ -17,7 +17,6 @@ public:
     int getMapSketchWidth() const;
     int getMapWidth() const;
 
-    void drawMap(const bool drawBackground, const bool underground, const unsigned view_x, GameScene& scene);
     void drawBackground(int cameraX, GameScene& scene);
     void drawForeground(int cameraX, GameScene& scene);
     void setMapCell(const int x, const int y, const GLOBAL::CELL_TYPE& cell);

@@ -20,7 +20,7 @@ public:
     virtual void update(float elapsedTime) override;
     void deactivate();
     bool isActivate();
-
+    void setType(Type type);
 
 private:
     static QList<QuestionBlock*> QUESTION_BLOCKS;

@@ -30,8 +30,8 @@ const QMap<QRgb, GLOBAL::CELL_TYPE> MapManager::colorToCellMap=
     {qRgb(0  , 182,   0), GLOBAL::CELL_TYPE::LeftPipe0              },
     {qRgb(0  , 160,   0), GLOBAL::CELL_TYPE::TopRightPipe0          },
     {qRgb(0  , 200,   0), GLOBAL::CELL_TYPE::RightPipe0             },
-    {qRgb(255, 73 ,  85), GLOBAL::CELL_TYPE::QuestionBlock          },//MushRoom
-    {qRgb(255, 146,  85), GLOBAL::CELL_TYPE::QuestionBlock          },
+    {qRgb(255, 73 ,  85), GLOBAL::CELL_TYPE::QuestionBlock0M        },//MushRoom
+    {qRgb(255, 146,  85), GLOBAL::CELL_TYPE::QuestionBlock0         },
     {qRgb(  0,   0,   0), GLOBAL::CELL_TYPE::Wall0                  },
     {qRgb(146,  73,   0), GLOBAL::CELL_TYPE::Wall1                  }
 };
@@ -44,7 +44,7 @@ const QMap<GLOBAL::CELL_TYPE, QPoint> MapManager::cellToPointOfSpriteMap=
     {GLOBAL::CELL_TYPE::LeftPipe0,              QPoint(10, 1)},
     {GLOBAL::CELL_TYPE::TopRightPipe0,          QPoint(11, 0)},
     {GLOBAL::CELL_TYPE::RightPipe0,             QPoint(11, 1)},
-    {GLOBAL::CELL_TYPE::QuestionBlock,          QPoint(6 , 1)},
+    {GLOBAL::CELL_TYPE::QuestionBlock0,          QPoint(6 , 1)},
     {GLOBAL::CELL_TYPE::Wall0,                  QPoint(2 , 0)},
     {GLOBAL::CELL_TYPE::Wall1,                  QPoint(3 , 0)}
 };
@@ -72,11 +72,6 @@ int MapManager::getMapSketchWidth() const
 int MapManager::getMapWidth() const
 {
     return m_map.size();
-}
-
-void MapManager::drawMap(const bool drawBackground, const bool underground, const unsigned view_x, GameScene &scene)
-{
-
 }
 
 void MapManager::drawBackground(int cameraX, GameScene &scene)
@@ -205,7 +200,7 @@ void MapManager::convertFromSketch(int currentLevel)
     {
         for(int y = 0; y < int(m_map.at(0).size()); ++y)
         {
-            if(cellToPointOfSpriteMap.contains(m_map[x][y]) && m_map[x][y] != GLOBAL::QuestionBlock)
+            if(cellToPointOfSpriteMap.contains(m_map[x][y]) && m_map[x][y] != GLOBAL::QuestionBlock0)
             {
                 Block::CreateBlock(m_map[x][y], QPointF(x * GLOBAL::TILE_SIZE.width(), y * GLOBAL::TILE_SIZE.height()));
             }
@@ -217,10 +212,13 @@ void MapManager::convertFromSketch(int currentLevel)
     {
         for(int y = 0; y < int(m_map.at(0).size()); ++y)
         {
-            if(m_map[x][y] == GLOBAL::QuestionBlock)
+            if(m_map[x][y] == GLOBAL::QuestionBlock0)
             {
-                //Block::CreateBlock(m_map[x][y], QPointF(x * GLOBAL::TILE_SIZE.width(), y * GLOBAL::TILE_SIZE.height()));
                 QuestionBlock::CreateQuestionBlock(QPointF(x * GLOBAL::TILE_SIZE.width(), y * GLOBAL::TILE_SIZE.height()));
+            }
+            else if(m_map[x][y] == GLOBAL::QuestionBlock0M)
+            {
+                QuestionBlock::CreateQuestionBlock(QPointF(x * GLOBAL::TILE_SIZE.width(), y * GLOBAL::TILE_SIZE.height()), QuestionBlock::Type::PowerSupply);
             }
         }
     }

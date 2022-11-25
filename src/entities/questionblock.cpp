@@ -7,7 +7,7 @@ QList<QuestionBlock*> QuestionBlock::QUESTION_BLOCKS;
 QuestionBlock::QuestionBlock()
     : m_activate(true), m_coinParticle(nullptr)
 {
-    setCellType(GLOBAL::QuestionBlock);
+    setCellType(GLOBAL::QuestionBlock0);
     createBlinkingAnimation();
     createCoinAnimation();
     QUESTION_BLOCKS.push_back(this);
@@ -25,6 +25,7 @@ QuestionBlock::~QuestionBlock()
 void QuestionBlock::CreateQuestionBlock(QPointF position, Type type)
 {
     QuestionBlock* questionBlock = new QuestionBlock();
+    questionBlock->setType(type);
     questionBlock->setPosition(position);
 }
 
@@ -52,10 +53,18 @@ void QuestionBlock::draw(GameScene &scene)
     //draw other element ie coin
     if(!m_activate)
     {
-        if(m_coinParticle)
+        if(m_type == QuestionBlock::Type::Coin)
         {
-            m_coinParticle->draw(scene);
+            if(m_coinParticle)
+            {
+                m_coinParticle->draw(scene);
+            }
         }
+        else if(m_type == QuestionBlock::Type::PowerSupply)
+        {
+
+        }
+
     }
 }
 
@@ -70,13 +79,16 @@ void QuestionBlock::update(float elapsedTime)
         //draw other element ie coin
         if(!m_activate)
         {
-            if(m_coinParticle)
+            if(m_type == QuestionBlock::Type::Coin)
             {
-                m_coinParticle->update(elapsedTime);
-                if(!m_coinParticle->isAlive())
+                if(m_coinParticle)
                 {
-                    delete m_coinParticle;
-                    m_coinParticle = nullptr;
+                    m_coinParticle->update(elapsedTime);
+                    if(!m_coinParticle->isAlive())
+                    {
+                        delete m_coinParticle;
+                        m_coinParticle = nullptr;
+                    }
                 }
             }
         }
@@ -98,6 +110,11 @@ void QuestionBlock::deactivate()
 bool QuestionBlock::isActivate()
 {
     return m_activate;
+}
+
+void QuestionBlock::setType(Type type)
+{
+    m_type = type;
 }
 
 void QuestionBlock::createCoinAnimation()
