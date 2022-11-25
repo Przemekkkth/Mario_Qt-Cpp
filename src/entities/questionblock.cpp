@@ -1,4 +1,5 @@
 #include "questionblock.h"
+#include "mushroom.h"
 #include <QGraphicsPixmapItem>
 #include <QList>
 
@@ -90,6 +91,12 @@ void QuestionBlock::update(float elapsedTime)
                         m_coinParticle = nullptr;
                     }
                 }
+            }
+            else if(m_type == QuestionBlock::Type::PowerSupply)
+            {
+                Mushroom::CreateMushroom(QPointF(position().x(), position().y()-GLOBAL::TILE_SIZE.height()),
+                                         Mushroom::Type::Grow);
+                setType(QuestionBlock::Type::None);
             }
         }
     }

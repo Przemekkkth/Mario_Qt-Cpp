@@ -8,7 +8,7 @@ class QuestionBlock : public Block
 {
 public:
     enum class Type{
-        Coin, PowerSupply, LifeMushroom
+        None, Coin, PowerSupply, LifeMushroom
     };
     QuestionBlock();
     ~QuestionBlock();
