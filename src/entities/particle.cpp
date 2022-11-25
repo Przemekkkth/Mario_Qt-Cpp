@@ -16,6 +16,7 @@ Particle::~Particle()
 void Particle::draw(GameScene &scene)
 {
     QGraphicsPixmapItem* pItem = new QGraphicsPixmapItem();
+    pItem->setZValue(GLOBAL::PARTICLE_LAYER);
     pItem->setPixmap(m_animator.pixmap());
     pItem->setPos(position());
     scene.addItem(pItem);

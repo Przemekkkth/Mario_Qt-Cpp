@@ -7,15 +7,21 @@
 class QuestionBlock : public Block
 {
 public:
+    enum class Type{
+        Coin, PowerSupply, LifeMushroom
+    };
     QuestionBlock();
     ~QuestionBlock();
-    static void CreateQuestionBlock(QPointF position);
+    static void CreateQuestionBlock(QPointF position,
+                                    QuestionBlock::Type type=QuestionBlock::Type::Coin);
     static void UpdateQuestionBlocks(float elapsedTime);
     static constexpr const float COIN_SPEED         = 160.0f;
     virtual void draw(GameScene &scene) override;
     virtual void update(float elapsedTime) override;
     void deactivate();
     bool isActivate();
+
+
 private:
     static QList<QuestionBlock*> QUESTION_BLOCKS;
     void createCoinAnimation();
@@ -25,7 +31,8 @@ private:
     QPixmap m_deactivatePixmap, m_coinTexturePixmap;
     Particle* m_coinParticle;
     Animator m_coinAnimation;
-    // Entity interface
+
+    Type m_type;
 };
 
 #endif // QUESTIONBLOCK_H

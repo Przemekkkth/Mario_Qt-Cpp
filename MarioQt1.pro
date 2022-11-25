@@ -4,6 +4,7 @@ HEADERS += \
     src/entities/block.h \
     src/entities/entity.h \
     src/entities/mario.h \
+    src/entities/mushroom.h \
     src/entities/particle.h \
     src/entities/questionblock.h \
     src/gamescene.h \
@@ -16,6 +17,7 @@ SOURCES += \
     src/entities/block.cpp \
     src/entities/entity.cpp \
     src/entities/mario.cpp \
+    src/entities/mushroom.cpp \
     src/entities/particle.cpp \
     src/entities/questionblock.cpp \
     src/gamescene.cpp \

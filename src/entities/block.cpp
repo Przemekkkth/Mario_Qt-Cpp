@@ -18,7 +18,6 @@ Block::~Block()
 void Block::CreateBlock(GLOBAL::CELL_TYPE cType, QPointF mapPosition)
 {
     Block* block = new Block();
-    //QPoint spritePosition = MapManager::cellToPointOfSpriteMap;
     block->setCellType(cType);
     QPoint spritePosition = MapManager::cellToPointOfSpriteMap.value(cType);
     block->setPixmap(
@@ -66,6 +65,7 @@ GLOBAL::CELL_TYPE Block::cellType() const
 void Block::draw(GameScene &scene)
 {
     QGraphicsPixmapItem* pItem = new QGraphicsPixmapItem();
+    pItem->setZValue(GLOBAL::BLOCK_LAYER);
     pItem->setPixmap(pixmap());
     pItem->setPos(position());
     scene.addItem(pItem);

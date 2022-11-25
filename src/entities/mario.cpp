@@ -75,6 +75,7 @@ void Mario::createAnimations()
 void Mario::draw(GameScene &scene)
 {
     QGraphicsPixmapItem* pItem = new QGraphicsPixmapItem();
+    pItem->setZValue(GLOBAL::MARIO_LAYER);
     pItem->setPos(int(position().x()), int(position().y()));
     pItem->setPixmap(m_animator.pixmap());
     scene.addItem(pItem);

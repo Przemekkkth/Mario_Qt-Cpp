@@ -22,7 +22,7 @@ QuestionBlock::~QuestionBlock()
     }
 }
 
-void QuestionBlock::CreateQuestionBlock(QPointF position)
+void QuestionBlock::CreateQuestionBlock(QPointF position, Type type)
 {
     QuestionBlock* questionBlock = new QuestionBlock();
     questionBlock->setPosition(position);

@@ -30,8 +30,8 @@ const QMap<QRgb, GLOBAL::CELL_TYPE> MapManager::colorToCellMap=
     {qRgb(0  , 182,   0), GLOBAL::CELL_TYPE::LeftPipe0              },
     {qRgb(0  , 160,   0), GLOBAL::CELL_TYPE::TopRightPipe0          },
     {qRgb(0  , 200,   0), GLOBAL::CELL_TYPE::RightPipe0             },
-    {qRgb(255, 73 ,  85), GLOBAL::CELL_TYPE::QuestionBlock },
-    {qRgb(255, 146,  85), GLOBAL::CELL_TYPE::QuestionBlock },
+    {qRgb(255, 73 ,  85), GLOBAL::CELL_TYPE::QuestionBlock          },//MushRoom
+    {qRgb(255, 146,  85), GLOBAL::CELL_TYPE::QuestionBlock          },
     {qRgb(  0,   0,   0), GLOBAL::CELL_TYPE::Wall0                  },
     {qRgb(146,  73,   0), GLOBAL::CELL_TYPE::Wall1                  }
 };
