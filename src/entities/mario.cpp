@@ -232,7 +232,10 @@ void Mario::collideWithBlock(Block* block)
             QuestionBlock* questionBlock = dynamic_cast<QuestionBlock*>(block);
             if(questionBlock)
             {
-                questionBlock->deactivate();
+                if(questionBlock->isActivate())
+                {
+                    questionBlock->deactivate();
+                }
             }
             m_velocityY = 0.1f;
         }

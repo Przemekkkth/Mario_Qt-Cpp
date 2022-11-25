@@ -15,6 +15,7 @@ public:
     virtual void draw(GameScene &scene) override;
     virtual void update(float elapsedTime) override;
     void deactivate();
+    bool isActivate();
 private:
     static QList<QuestionBlock*> QUESTION_BLOCKS;
     void createCoinAnimation();

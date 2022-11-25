@@ -116,6 +116,11 @@ void QuestionBlock::deactivate()
     }
 }
 
+bool QuestionBlock::isActivate()
+{
+    return m_activate;
+}
+
 void QuestionBlock::createCoinAnimation()
 {
     m_coinTexturePixmap.load(":/res/coin.png");
