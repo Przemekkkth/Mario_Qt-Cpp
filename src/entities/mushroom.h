@@ -11,7 +11,7 @@ public:
     enum class Type{
       Grow, Life
     };
-    static constexpr const float MUSHROOM_SPEED = 40.f;
+    static constexpr const float MUSHROOM_SPEED = 80.f;
     static void CreateMushroom(QPointF pos, Type type);
     static QList<Mushroom*> MUSHROOMS;
     Mushroom(float x, float y);

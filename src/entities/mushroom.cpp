@@ -22,6 +22,7 @@ Mushroom::Mushroom(float x, float y)
 
 Mushroom::~Mushroom()
 {
+    qDebug() << "Deleted";
     MUSHROOMS.removeOne(this);
 }
 
@@ -41,7 +42,14 @@ void Mushroom::update(float elapsedTime)
     m_animator.update(elapsedTime);
     checkCollisionWithBlocks();
     setPosition(position().x() + m_velocityX, position().y() + m_velocityY);
-    //qDebug() << m_animator.m_currentFrame;
+    if(position().x() < 0.0f - GLOBAL::TILE_SIZE.width())
+    {
+        delete this;
+    }
+    if(position().y() > GLOBAL::SCREEN_SIZE.height()+GLOBAL::TILE_SIZE.height())
+    {
+        delete this;
+    }
 }
 
 Mushroom::Type Mushroom::type() const
