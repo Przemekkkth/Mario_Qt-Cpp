@@ -64,7 +64,6 @@ void GameScene::loop()
         m_mario->draw(*this);
         for(int i = 0; i < Mushroom::MUSHROOMS.size(); ++i)
         {
-            qDebug() << "size " << Mushroom::MUSHROOMS.size();
             Mushroom::MUSHROOMS.at(i)->draw(*this);
         }
         setSceneRect(getCameraX(*m_mario), 0, GLOBAL::SCREEN_SIZE.width(), GLOBAL::SCREEN_SIZE.height());

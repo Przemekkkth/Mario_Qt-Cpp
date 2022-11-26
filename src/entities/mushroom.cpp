@@ -1,13 +1,16 @@
 #include "mushroom.h"
 #include <QList>
 #include <QGraphicsPixmapItem>
+#include "block.h"
 
 QList<Mushroom*> Mushroom::MUSHROOMS;
 
 void Mushroom::CreateMushroom(QPointF pos, Type type)
 {
     Mushroom* mushroom = new Mushroom(pos.x(), pos.y());
+    mushroom->setDirection(true);
     mushroom->setType(type);
+
 }
 
 Mushroom::Mushroom(float x, float y)
@@ -33,8 +36,11 @@ void Mushroom::draw(GameScene &scene)
 
 void Mushroom::update(float elapsedTime)
 {
+    m_velocityY += GLOBAL::GRAVITY;
+    m_velocityX = direction()*MUSHROOM_SPEED*elapsedTime;
     m_animator.update(elapsedTime);
-    setPosition(position().x(), position().y());
+    checkCollisionWithBlocks();
+    setPosition(position().x() + m_velocityX, position().y() + m_velocityY);
     //qDebug() << m_animator.m_currentFrame;
 }
 
@@ -46,6 +52,76 @@ Mushroom::Type Mushroom::type() const
 void Mushroom::setType(Type type)
 {
     m_type = type;
+}
+
+void Mushroom::setDirection(bool isRight)
+{
+    m_isRight = isRight;
+}
+
+int Mushroom::direction() const
+{
+    if(m_isRight)
+    {
+        return 1;
+    }
+    else
+    {
+        return -1;
+    }
+}
+
+QRectF Mushroom::hitBox()
+{
+    return QRectF(position().x(), position().y(), GLOBAL::TILE_SIZE.width(), GLOBAL::TILE_SIZE.height());
+}
+
+void Mushroom::checkCollisionWithBlocks()
+{
+    for(int i = 0; i < Block::BLOCKS.size(); ++i)
+    {
+
+        collideWithBlock(Block::BLOCKS.at(i));
+    }
+}
+
+void Mushroom::collideWithBlock(Block* block)
+{
+    // Calculate potential new position
+    float CollideX;
+    float CollideY;
+    float shrinkPixel = 5.f, shrinkFactor = 0.9f;//For one tile row, column to avoid block
+
+    //X-axis
+    if (m_velocityX <= 0.0f) // Moving Left
+    {
+        CollideX = position().x() + m_velocityX;
+        if(block->hitBox().contains(CollideX, position().y()))
+        {
+            qDebug() << "Left";
+            setDirection(!m_isRight);
+        }
+    }
+    else // Moving Right
+    {
+        CollideX = position().x() + hitBox().width() + m_velocityX;
+        if(block->hitBox().contains(CollideX, position().y()))
+        {
+            qDebug() << "Right";
+            setDirection(!m_isRight);
+        }
+    }
+    //Y-axis
+    if(m_velocityY > 0.0f) // Moving Down
+    {
+        CollideY = position().y() + hitBox().height() + m_velocityY;
+        if(block->hitBox().contains(position().x()+shrinkPixel, CollideY)
+                ||
+                block->hitBox().contains(position().x()+shrinkFactor*hitBox().width() , CollideY))
+        {
+            m_velocityY = 0.0f;
+        }
+    }
 }
 
 void Mushroom::createAnimation()

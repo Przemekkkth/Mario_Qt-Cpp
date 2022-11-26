@@ -4,6 +4,7 @@
 #include "../utils/animator.h"
 #include <QPixmap>
 
+class Block;
 class Mushroom : public Entity
 {
 public:
@@ -19,12 +20,18 @@ public:
     virtual void update(float elapsedTime) override;
     Type type() const;
     void setType(Type type);
+    void setDirection(bool isRight);
+    int direction() const;
+    QRectF hitBox();
 private:
     void createAnimation();
+    void checkCollisionWithBlocks();
+    void collideWithBlock(Block* block);
     float m_velocityX, m_velocityY;
     Animator m_animator;
     QPixmap m_texturePixmap;
     Type m_type;
+    bool m_isRight;
 };
 
 #endif // MUSHROOM_H
