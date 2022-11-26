@@ -96,7 +96,7 @@ void Mushroom::collideWithBlock(Block* block)
     if (m_velocityX <= 0.0f) // Moving Left
     {
         CollideX = position().x() + m_velocityX;
-        if(block->hitBox().contains(CollideX, position().y()))
+        if(block->hitBox().contains(int(CollideX), position().y()+hitBox().height()/2))
         {
             qDebug() << "Left";
             setDirection(!m_isRight);
@@ -105,7 +105,7 @@ void Mushroom::collideWithBlock(Block* block)
     else // Moving Right
     {
         CollideX = position().x() + hitBox().width() + m_velocityX;
-        if(block->hitBox().contains(CollideX, position().y()))
+        if(block->hitBox().contains(int(CollideX), position().y()+hitBox().height()/2))
         {
             qDebug() << "Right";
             setDirection(!m_isRight);
