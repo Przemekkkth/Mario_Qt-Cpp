@@ -23,6 +23,7 @@ public:
     void setDirection(bool isRight);
     int direction() const;
     QRectF hitBox();
+    void hit();
 private:
     void createAnimation();
     void checkCollisionWithBlocks();

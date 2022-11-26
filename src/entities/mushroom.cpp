@@ -84,6 +84,11 @@ QRectF Mushroom::hitBox()
     return QRectF(position().x(), position().y(), GLOBAL::TILE_SIZE.width(), GLOBAL::TILE_SIZE.height());
 }
 
+void Mushroom::hit()
+{
+    delete this;
+}
+
 void Mushroom::checkCollisionWithBlocks()
 {
     for(int i = 0; i < Block::BLOCKS.size(); ++i)

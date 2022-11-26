@@ -7,6 +7,7 @@
 
 class Block;
 class GameScene;
+class Mushroom;
 class Mario : public Entity {
 public:
     static constexpr const float MOVE_SPEED         = 20.0f;
@@ -21,10 +22,14 @@ public:
     virtual void draw(GameScene &scene) override;
     virtual void update(float elapsedTime) override;
     void update(float elapsedTime, GameScene& scene);
+    void setBig(bool on);
+    bool isBig() const;
 private:
     void clampVelocities(float elapsedTime);
     void checkCollisionWithBlocks();
     void collideWithBlock(Block *block);
+    void checkCollisionWithMushrooms();
+    void collideWithMushroom(Mushroom *mushroom);
     void setAnimatationState(QString state);
     void setFliped();
     void createAnimations();

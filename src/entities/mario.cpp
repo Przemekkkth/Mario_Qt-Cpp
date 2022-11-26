@@ -1,6 +1,7 @@
 #include "mario.h"
 #include "block.h"
 #include "questionblock.h"
+#include "mushroom.h"
 #include <QGraphicsPixmapItem>
 
 
@@ -62,11 +63,11 @@ void Mario::createAnimations()
     m_animator.m_mapStates["run_b_"].push_back(m_texture.copy(6*TSW,0*TSH, TSW,2*TSH)
                                                .scaled(TS, 2*TH));
 
-    m_animator.m_mapStates["run_b__f_"].push_back(m_texture.copy(4*TSW,0*TSH, TSW,TSH)
+    m_animator.m_mapStates["run_b__f_"].push_back(m_texture.copy(4*TSW,0*TSH, TSW,2*TSH)
                                                   .scaled(TS, 2*TH).transformed(QTransform().scale(-1,1)));
-    m_animator.m_mapStates["run_b__f_"].push_back(m_texture.copy(5*TSW,0*TSH, TSW,TSH)
+    m_animator.m_mapStates["run_b__f_"].push_back(m_texture.copy(5*TSW,0*TSH, TSW,2*TSH)
                                                   .scaled(TS, 2*TH).transformed(QTransform().scale(-1,1)));
-    m_animator.m_mapStates["run_b__f_"].push_back(m_texture.copy(6*TSW,0*TSH, TSW,TSH)
+    m_animator.m_mapStates["run_b__f_"].push_back(m_texture.copy(6*TSW,0*TSH, TSW,2*TSH)
                                                   .scaled(TS, 2*TH).transformed(QTransform().scale(-1,1)));
     m_animator.changeState("idle");
     m_animator.m_timeBetweenFrames = 0.25f;
@@ -95,6 +96,7 @@ void Mario::update(float elapsedTime)
     }
     clampVelocities(elapsedTime);
     checkCollisionWithBlocks();
+    checkCollisionWithMushrooms();
     setPosition(int(position().x() + m_velocityX), int(position().y() + m_velocityY));
 
     // Set Animation
@@ -160,6 +162,20 @@ void Mario::update(float elapsedTime, GameScene &scene)
     }
     update(elapsedTime);
     m_animator.update(elapsedTime);
+}
+
+void Mario::setBig(bool on)
+{
+    if(on && !m_big)
+    {
+        setPosition(position().x(), position().y()-GLOBAL::TILE_SIZE.height());
+    }
+    m_big = on;
+}
+
+bool Mario::isBig() const
+{
+    return m_big;
 }
 
 void Mario::clampVelocities(float elapsedTime)
@@ -251,6 +267,30 @@ void Mario::collideWithBlock(Block* block)
             m_velocityY = 0.0f;
             m_onGround = true;
         }
+    }
+}
+
+void Mario::checkCollisionWithMushrooms()
+{
+    foreach(Mushroom* mushroom, Mushroom::MUSHROOMS)
+    {
+        collideWithMushroom(mushroom);
+    }
+}
+
+void Mario::collideWithMushroom(Mushroom *mushroom)
+{
+    if(hitBox().contains(int(mushroom->position().x()), int(mushroom->y()))
+            ||
+       hitBox().contains(int(mushroom->position().x()+mushroom->hitBox().width()), int(mushroom->y()))
+            ||
+       hitBox().contains(int(mushroom->position().x()), int(mushroom->y()+mushroom->hitBox().height()))
+            ||
+       hitBox().contains(int(mushroom->position().x()+mushroom->hitBox().width()), int(mushroom->y()+mushroom->hitBox().height()))
+            )
+    {
+        mushroom->hit();
+        setBig(true);
     }
 }
 
