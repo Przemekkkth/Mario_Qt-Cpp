@@ -142,7 +142,7 @@ void Mario::update(float elapsedTime, GameScene &scene)
             m_velocityX += (m_onGround ? +MOVE_SPEED : +0.75*MOVE_SPEED) * elapsedTime;
         }
     }
-    if(scene.keys(Qt::Key_Z)->m_released)
+    if(scene.keys(Qt::Key_Z)->m_held)
     {
         //m_velocityY < std::fabs(1.f) <= read value is before gravity works
         if (m_onGround && !int(m_velocityY))
