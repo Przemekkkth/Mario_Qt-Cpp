@@ -38,6 +38,7 @@ private:
     QPixmap m_texture;
     float m_velocityX, m_velocityY;
     bool m_onGround, m_runMode;
+    bool m_crouchning;
     Animator m_animator;
 };
 
