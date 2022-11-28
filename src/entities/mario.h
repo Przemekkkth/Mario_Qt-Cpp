@@ -18,6 +18,7 @@ public:
     static constexpr const float MAX_MOVE_SPEED     = 150.0f;
     static constexpr const float MAX_RUN_SPEED      = 12.0f;
     static constexpr const float MAX_FALLDOWN_SPEED = 350.0f;
+    static constexpr const float HURT_TIMER         = 2.f;
     Mario();
 public:
     virtual void draw(GameScene &scene) override;
@@ -33,20 +34,24 @@ private:
     void checkCollisionWithMushrooms();
     void collideWithMushroom(Mushroom *mushroom);
     void checkCollisionWithEnemies();
+    void chooseAnimation();
     void collideWithEnemy(Enemy* enemy);
     void setAnimatationState(QString state);
     void setFliped();
     void createAnimations();
     void jump(float jumpSpeed);
+    void handleHurtCounter(float elapsedTime);
     bool m_big, m_fliped, m_hurt, m_dead;
     void setHurt();
     QRectF hitBox();
     QPixmap m_texture;
     float m_velocityX, m_velocityY;
     float m_elapsedTime;
+    float m_hurtTimer;
     bool m_onGround, m_runMode;
     bool m_crouchning;
     Animator m_animator;
+
 };
 
 #endif // MARIO_H

@@ -11,6 +11,7 @@ Mario::Mario()
       m_runMode(false), m_crouchning(false)
 {
     createAnimations();
+    m_hurtTimer = HURT_TIMER;
 }
 
 void Mario::createAnimations()
@@ -94,12 +95,26 @@ void Mario::jump(float jumpSpeed)
     m_velocityY = jumpSpeed;
 }
 
+void Mario::handleHurtCounter(float elapsedTime)
+{
+    if(m_hurt)
+    {
+        m_hurtTimer -= elapsedTime;
+        if(m_hurtTimer < 0.0f)
+        {
+            m_hurtTimer = HURT_TIMER;
+            m_hurt = false;
+        }
+    }
+}
+
 void Mario::setHurt()
 {
     m_hurt = true;
     if(m_big)
     {
         m_big = false;
+        setPosition(position().x(), position().y()+GLOBAL::TILE_SIZE.height());
     }
     else
     {
@@ -112,30 +127,23 @@ void Mario::draw(GameScene &scene)
     QGraphicsPixmapItem* pItem = new QGraphicsPixmapItem();
     pItem->setZValue(GLOBAL::MARIO_LAYER);
     pItem->setPos(int(position().x()), int(position().y()));
-    pItem->setPixmap(m_animator.pixmap());
+    if(m_hurt)
+    {
+        int val = m_hurtTimer*10;
+        if(val%2)
+        {
+            pItem->setPixmap(m_animator.pixmap());
+        }
+    }
+    else
+    {
+        pItem->setPixmap(m_animator.pixmap());
+    }
     scene.addItem(pItem);
 }
 
-void Mario::update(float elapsedTime)
+void Mario::chooseAnimation()
 {
-    m_velocityY += GLOBAL::GRAVITY;
-    // Drag
-    if (m_onGround)
-    {
-        m_velocityX += -DRAG_VALUE * m_velocityX * elapsedTime;
-
-        if (std::fabs(m_velocityX) < 0.01f)
-        {
-            m_velocityX = 0.0f;
-        }
-    }
-    clampVelocities(elapsedTime);
-    checkCollisionWithBlocks();
-    checkCollisionWithMushrooms();
-    checkCollisionWithEnemies();
-    setPosition(int(position().x() + m_velocityX), int(position().y() + m_velocityY));
-
-    // Set Animation
     setFliped();
     if(m_onGround && std::fabs(m_velocityX) > 1.f)
     {
@@ -160,6 +168,31 @@ void Mario::update(float elapsedTime)
     {
         setAnimatationState("die");
     }
+}
+
+void Mario::update(float elapsedTime)
+{
+    m_velocityY += GLOBAL::GRAVITY;
+    // Drag
+    if (m_onGround)
+    {
+        m_velocityX += -DRAG_VALUE * m_velocityX * elapsedTime;
+
+        if (std::fabs(m_velocityX) < 0.01f)
+        {
+            m_velocityX = 0.0f;
+        }
+    }
+    clampVelocities(elapsedTime);
+    checkCollisionWithBlocks();
+    checkCollisionWithMushrooms();
+    checkCollisionWithEnemies();
+    setPosition(int(position().x() + m_velocityX), int(position().y() + m_velocityY));
+
+    // Set Animation
+    chooseAnimation();
+
+    handleHurtCounter(elapsedTime);
 }
 
 void Mario::update(float elapsedTime, GameScene &scene)
@@ -245,6 +278,7 @@ void Mario::resetStatus()
     m_crouchning = false;
     m_hurt       = false;
     m_dead       = false;
+    m_hurtTimer  = HURT_TIMER;
     setPosition(0,0);
 }
 
@@ -387,7 +421,7 @@ void Mario::collideWithEnemy(Enemy *enemy)
                 ||
                 enemy->hitBox().contains(CollideX, position().y()+hitBox().height()))
         {
-            if(enemy->isAlive())
+            if(enemy->isAlive() && !m_hurt)
             {
                 setHurt();
             }
@@ -401,7 +435,7 @@ void Mario::collideWithEnemy(Enemy *enemy)
                 ||
                 enemy->hitBox().contains(CollideX, position().y()+hitBox().height()))
         {
-            if(enemy->isAlive())
+            if(enemy->isAlive() && !m_hurt)
             {
                 setHurt();
             }
@@ -415,7 +449,7 @@ void Mario::collideWithEnemy(Enemy *enemy)
                 ||
                 enemy->hitBox().contains(position().x()+shrinkFactor*hitBox().width() , CollideY))
         {
-            if(enemy->isAlive())
+            if(enemy->isAlive()&& !m_hurt)
             {
                 setHurt();
             }
