@@ -65,11 +65,13 @@ static constexpr const float GRAVITY = 0.2f;
 
 using Map = QVector<std::array<CELL_TYPE, SCREEN_SIZE.height() / TILE_SIZE.height()>>;
 
+static constexpr const int ENTITY_UPDATE_AREA = 64;
+
 //////////Layer z-value
-static constexpr const int BG_LAYER = 0;
-static constexpr const int BLOCK_LAYER = 10;
-static constexpr const int ENEMY_LAYER = 15;
-static constexpr const int MARIO_LAYER = 20;
+static constexpr const int BG_LAYER       = 0;
+static constexpr const int BLOCK_LAYER    = 10;
+static constexpr const int ENEMY_LAYER    = 15;
+static constexpr const int MARIO_LAYER    = 20;
 static constexpr const int PARTICLE_LAYER = 30;
 }
 

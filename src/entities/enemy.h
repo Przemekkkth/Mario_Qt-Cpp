@@ -10,6 +10,8 @@ public:
     };
     Enemy(float x, float y);
     virtual ~Enemy();
+    virtual QRectF hitBox() = 0;
+    virtual void update(int cameraX, float elapsedTime) = 0;
     static QList<Enemy*> ENEMIES;
     static void CreateEnemy(Type type, QPointF position);
 };

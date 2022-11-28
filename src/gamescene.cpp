@@ -58,7 +58,7 @@ void GameScene::loop()
         }
         for(int i = 0; i < Enemy::ENEMIES.size(); ++i)
         {
-            Enemy::ENEMIES.at(i)->update(elapsedTime);
+            Enemy::ENEMIES.at(i)->update(getCameraX(*m_mario), elapsedTime);
         }
 //draw
         clear();

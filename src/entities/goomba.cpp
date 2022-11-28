@@ -1,6 +1,7 @@
 #include "goomba.h"
 #include <QGraphicsPixmapItem>
 #include "block.h"
+#include "enemy.h"
 
 Goomba::Goomba(float x, float y)
     : Enemy(x, y), m_isRight(false)
@@ -28,6 +29,7 @@ void Goomba::update(float elapsedTime)
     m_velocityX = direction()*GOOMBA_SPEED*elapsedTime;
     m_animator.update(elapsedTime);
     checkCollisionWithBlocks();
+    checkCollisonWithEnemies();
     setPosition(position().x() + m_velocityX, position().y() + m_velocityY);
     if(position().x() < 0.0f - GLOBAL::TILE_SIZE.width())
     {
@@ -39,11 +41,19 @@ void Goomba::update(float elapsedTime)
     }
 }
 
+void Goomba::update(int cameraX, float elapsedTime)
+{
+    if( position().x() >= cameraX - GLOBAL::TILE_SIZE.width() - GLOBAL::ENTITY_UPDATE_AREA
+            && position().x() < GLOBAL::ENTITY_UPDATE_AREA + GLOBAL::SCREEN_SIZE.width() + cameraX  )
+    {
+        update(elapsedTime);
+    }
+}
+
 void Goomba::checkCollisionWithBlocks()
 {
     for(int i = 0; i < Block::BLOCKS.size(); ++i)
     {
-
         collideWithBlock(Block::BLOCKS.at(i));
     }
 }
@@ -81,6 +91,40 @@ void Goomba::collideWithBlock(Block *block)
                 block->hitBox().contains(position().x()+shrinkFactor*hitBox().width() , CollideY))
         {
             m_velocityY = 0.0f;
+        }
+    }
+}
+
+void Goomba::checkCollisonWithEnemies()
+{
+    for(int i = 0; i < Enemy::ENEMIES.size(); ++i)
+    {
+        collideWithEnemy(Enemy::ENEMIES.at(i));
+    }
+}
+
+void Goomba::collideWithEnemy(Enemy *enemy)
+{
+    // Calculate potential new position
+    float CollideX;
+    float CollideY;
+    float shrinkPixel = 5.f, shrinkFactor = 0.9f;//For one tile row, column to avoid block
+
+    //X-axis
+    if (m_velocityX <= 0.0f) // Moving Left
+    {
+        CollideX = position().x() + m_velocityX;
+        if(enemy->hitBox().contains(int(CollideX), position().y()+hitBox().height()/2))
+        {
+            setDirection(!m_isRight);
+        }
+    }
+    else // Moving Right
+    {
+        CollideX = position().x() + hitBox().width() + m_velocityX;
+        if(enemy->hitBox().contains(int(CollideX), position().y()+hitBox().height()/2))
+        {
+            setDirection(!m_isRight);
         }
     }
 }
