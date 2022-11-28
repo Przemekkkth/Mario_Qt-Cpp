@@ -38,7 +38,8 @@ private:
     void setFliped();
     void createAnimations();
     void jump(float jumpSpeed);
-    bool m_big, m_fliped;
+    bool m_big, m_fliped, m_hurt, m_dead;
+    void setHurt();
     QRectF hitBox();
     QPixmap m_texture;
     float m_velocityX, m_velocityY;

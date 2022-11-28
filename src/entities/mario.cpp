@@ -7,7 +7,7 @@
 
 
 Mario::Mario()
-    : m_big(false), m_fliped(false), m_velocityX(0.0f), m_velocityY(0.0f), m_elapsedTime(0.0f), m_onGround(false),
+    : m_big(false), m_fliped(false), m_hurt(false), m_dead(false), m_velocityX(0.0f), m_velocityY(0.0f), m_elapsedTime(0.0f), m_onGround(false),
       m_runMode(false), m_crouchning(false)
 {
     createAnimations();
@@ -50,7 +50,7 @@ void Mario::createAnimations()
                                             .scaled(TS, TH));
 
     m_animator.m_mapStates["die_f_"].push_back(m_texture.copy(3*TSW,4*TSH, TSW,TSH)
-                                            .scaled(TS, TH).transformed(QTransform().scale(-1, 1)));
+                                               .scaled(TS, TH).transformed(QTransform().scale(-1, 1)));
     ///////////////////////////BIG//////////////////////
     //0 0  1frame
     m_animator.m_mapStates["idle_b_"].push_back(m_texture.copy(0,0*TSH, TSW,2*TSH)
@@ -80,9 +80,9 @@ void Mario::createAnimations()
 
     //0 3 1frame
     m_animator.m_mapStates["crouching_b_"].push_back(m_texture.copy(3*TSW,0*TSH, TSW,2*TSH)
-                                               .scaled(TS, 2*TH));
+                                                     .scaled(TS, 2*TH));
     m_animator.m_mapStates["crouching_b__f_"].push_back(m_texture.copy(3*TSW,0*TSH, TSW,2*TSH)
-                                               .scaled(TS, 2*TH).transformed(QTransform().scale(-1,1)));
+                                                        .scaled(TS, 2*TH).transformed(QTransform().scale(-1,1)));
 
 
     m_animator.changeState("idle");
@@ -92,6 +92,19 @@ void Mario::createAnimations()
 void Mario::jump(float jumpSpeed)
 {
     m_velocityY = jumpSpeed;
+}
+
+void Mario::setHurt()
+{
+    m_hurt = true;
+    if(m_big)
+    {
+        m_big = false;
+    }
+    else
+    {
+        m_dead = true;
+    }
 }
 
 void Mario::draw(GameScene &scene)
@@ -142,6 +155,10 @@ void Mario::update(float elapsedTime)
     }
     if(!m_onGround){
         setAnimatationState("jump");
+    }
+    if(m_dead)
+    {
+        setAnimatationState("die");
     }
 }
 
@@ -226,6 +243,8 @@ void Mario::resetStatus()
     m_onGround   = false;
     m_runMode    = false;
     m_crouchning = false;
+    m_hurt       = false;
+    m_dead       = false;
     setPosition(0,0);
 }
 
@@ -333,11 +352,11 @@ void Mario::collideWithMushroom(Mushroom *mushroom)
 {
     if(hitBox().contains(int(mushroom->position().x()), int(mushroom->y()))
             ||
-       hitBox().contains(int(mushroom->position().x()+mushroom->hitBox().width()), int(mushroom->y()))
+            hitBox().contains(int(mushroom->position().x()+mushroom->hitBox().width()), int(mushroom->y()))
             ||
-       hitBox().contains(int(mushroom->position().x()), int(mushroom->y()+mushroom->hitBox().height()))
+            hitBox().contains(int(mushroom->position().x()), int(mushroom->y()+mushroom->hitBox().height()))
             ||
-       hitBox().contains(int(mushroom->position().x()+mushroom->hitBox().width()), int(mushroom->y()+mushroom->hitBox().height()))
+            hitBox().contains(int(mushroom->position().x()+mushroom->hitBox().width()), int(mushroom->y()+mushroom->hitBox().height()))
             )
     {
         mushroom->hit();
@@ -368,6 +387,11 @@ void Mario::collideWithEnemy(Enemy *enemy)
                 ||
                 enemy->hitBox().contains(CollideX, position().y()+hitBox().height()))
         {
+            if(enemy->isAlive())
+            {
+                setHurt();
+            }
+
         }
     }
     else // Moving Right
@@ -377,6 +401,10 @@ void Mario::collideWithEnemy(Enemy *enemy)
                 ||
                 enemy->hitBox().contains(CollideX, position().y()+hitBox().height()))
         {
+            if(enemy->isAlive())
+            {
+                setHurt();
+            }
         }
     }
     //Y-axis
@@ -387,6 +415,10 @@ void Mario::collideWithEnemy(Enemy *enemy)
                 ||
                 enemy->hitBox().contains(position().x()+shrinkFactor*hitBox().width() , CollideY))
         {
+            if(enemy->isAlive())
+            {
+                setHurt();
+            }
         }
     }
     else if(m_velocityY > 1.f)// Moving Down
