@@ -37,10 +37,12 @@ private:
     void setAnimatationState(QString state);
     void setFliped();
     void createAnimations();
+    void jump(float jumpSpeed);
     bool m_big, m_fliped;
     QRectF hitBox();
     QPixmap m_texture;
     float m_velocityX, m_velocityY;
+    float m_elapsedTime;
     bool m_onGround, m_runMode;
     bool m_crouchning;
     Animator m_animator;

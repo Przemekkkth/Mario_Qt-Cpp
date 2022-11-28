@@ -7,8 +7,8 @@
 
 
 Mario::Mario()
-    : m_big(false), m_fliped(false), m_velocityX(0.0f), m_velocityY(0.0f), m_onGround(false), m_runMode(false),
-      m_crouchning(false)
+    : m_big(false), m_fliped(false), m_velocityX(0.0f), m_velocityY(0.0f), m_elapsedTime(0.0f), m_onGround(false),
+      m_runMode(false), m_crouchning(false)
 {
     createAnimations();
 }
@@ -89,6 +89,11 @@ void Mario::createAnimations()
     m_animator.m_timeBetweenFrames = 0.25f;
 }
 
+void Mario::jump(float jumpSpeed)
+{
+    m_velocityY = jumpSpeed;
+}
+
 void Mario::draw(GameScene &scene)
 {
     QGraphicsPixmapItem* pItem = new QGraphicsPixmapItem();
@@ -142,6 +147,7 @@ void Mario::update(float elapsedTime)
 
 void Mario::update(float elapsedTime, GameScene &scene)
 {
+    m_elapsedTime = elapsedTime;
     bool leftPressed = scene.keys(Qt::Key_A)->m_held;
     bool rightPressed = scene.keys(Qt::Key_D)->m_held;
     bool jumpPressed = scene.keys(Qt::Key_Z)->m_held;
@@ -176,7 +182,8 @@ void Mario::update(float elapsedTime, GameScene &scene)
         //m_velocityY < std::fabs(1.f) <= read value is before gravity works
         if (m_onGround && !int(m_velocityY))
         {
-            m_velocityY = -JUMP_SPEED * elapsedTime;
+            //m_velocityY = -JUMP_SPEED * elapsedTime;
+            jump(-JUMP_SPEED * elapsedTime);
             //nDirModX = 1;
         }
     }
@@ -392,6 +399,7 @@ void Mario::collideWithEnemy(Enemy *enemy)
             if(enemy->isAlive())
             {
                 enemy->setAlive(false);
+                jump(-JUMP_SPEED/4.0f*m_elapsedTime);
             }
         }
     }
