@@ -45,6 +45,12 @@ void Mario::createAnimations()
                                                .scaled(TS, TH).transformed(QTransform().scale(-1,1)));
     m_animator.m_mapStates["run_f_"].push_back(m_texture.copy(6*TSW,4*TSH, TSW,TSH)
                                                .scaled(TS, TH).transformed(QTransform().scale(-1,1)));
+    //3 4 1frame
+    m_animator.m_mapStates["die"].push_back(m_texture.copy(3*TSW,4*TSH, TSW,TSH)
+                                            .scaled(TS, TH));
+
+    m_animator.m_mapStates["die_f_"].push_back(m_texture.copy(3*TSW,4*TSH, TSW,TSH)
+                                            .scaled(TS, TH).transformed(QTransform().scale(-1, 1)));
     ///////////////////////////BIG//////////////////////
     //0 0  1frame
     m_animator.m_mapStates["idle_b_"].push_back(m_texture.copy(0,0*TSH, TSW,2*TSH)
@@ -77,6 +83,7 @@ void Mario::createAnimations()
                                                .scaled(TS, 2*TH));
     m_animator.m_mapStates["crouching_b__f_"].push_back(m_texture.copy(3*TSW,0*TSH, TSW,2*TSH)
                                                .scaled(TS, 2*TH).transformed(QTransform().scale(-1,1)));
+
 
     m_animator.changeState("idle");
     m_animator.m_timeBetweenFrames = 0.25f;
@@ -201,6 +208,18 @@ void Mario::setBig(bool on)
 bool Mario::isBig() const
 {
     return m_big;
+}
+
+void Mario::resetStatus()
+{
+    m_big        = false;
+    m_fliped     = false;
+    m_velocityX  = 0.0f;
+    m_velocityY  = 0.0f;
+    m_onGround   = false;
+    m_runMode    = false;
+    m_crouchning = false;
+    setPosition(0,0);
 }
 
 void Mario::clampVelocities(float elapsedTime)
@@ -370,7 +389,6 @@ void Mario::collideWithEnemy(Enemy *enemy)
                 ||
                 enemy->hitBox().contains(position().x()+shrinkFactor*hitBox().width() , CollideY))
         {
-            qDebug() << m_velocityY;
             if(enemy->isAlive())
             {
                 enemy->setAlive(false);

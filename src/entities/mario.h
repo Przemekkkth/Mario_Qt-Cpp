@@ -25,6 +25,7 @@ public:
     void update(float elapsedTime, GameScene& scene);
     void setBig(bool on);
     bool isBig() const;
+    void resetStatus();
 private:
     void clampVelocities(float elapsedTime);
     void checkCollisionWithBlocks();

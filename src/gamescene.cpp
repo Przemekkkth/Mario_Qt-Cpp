@@ -95,6 +95,10 @@ void GameScene::handlePlayerInput()
     {
         m_x += 10;
     }
+    if(m_keys[Qt::Key_R]->m_released)
+    {
+        resetGameScene();
+    }
 }
 
 void GameScene::resetStatus()
@@ -104,6 +108,16 @@ void GameScene::resetStatus()
         m_keys[i]->m_released = false;
     }
     m_mouse->m_released = false;
+}
+
+void GameScene::resetGameScene()
+{
+    Block::BLOCKS.clear();
+    Mushroom::MUSHROOMS.clear();
+    Enemy::ENEMIES.clear();
+    m_mapManager.updateMapSketch(0);
+    m_mapManager.convertFromSketch(0);
+    m_mario->resetStatus();
 }
 
 float GameScene::getCameraX(const Mario &mario)
