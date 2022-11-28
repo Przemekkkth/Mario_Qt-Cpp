@@ -1,5 +1,6 @@
 #include "enemy.h"
 #include "goomba.h"
+#include <QDebug>
 
 QList<Enemy*> Enemy::ENEMIES;
 
@@ -11,6 +12,7 @@ Enemy::Enemy(float x, float y)
 
 Enemy::~Enemy()
 {
+    qDebug() << "~Enemy";
     ENEMIES.removeOne(this);
 }
 

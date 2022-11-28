@@ -65,7 +65,7 @@ static constexpr const float GRAVITY = 0.2f;
 
 using Map = QVector<std::array<CELL_TYPE, SCREEN_SIZE.height() / TILE_SIZE.height()>>;
 
-//////////Layer z value
+//////////Layer z-value
 static constexpr const int BG_LAYER = 0;
 static constexpr const int BLOCK_LAYER = 10;
 static constexpr const int ENEMY_LAYER = 15;
