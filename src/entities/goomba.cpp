@@ -7,6 +7,8 @@ Goomba::Goomba(float x, float y)
     : Enemy(x, y), m_isRight(false)
 {
     createAnimation();
+    m_deathCounter = GOOMBA_DEAD_TIMER;
+    m_speed        = GOOMBA_SPEED;
 }
 
 Goomba::~Goomba()
@@ -26,11 +28,28 @@ void Goomba::draw(GameScene &scene)
 void Goomba::update(float elapsedTime)
 {
     m_velocityY += GLOBAL::GRAVITY;
-    m_velocityX = direction()*GOOMBA_SPEED*elapsedTime;
+    m_velocityX = direction()*m_speed*elapsedTime;
     m_animator.update(elapsedTime);
     checkCollisionWithBlocks();
     checkCollisonWithEnemies();
     setPosition(position().x() + m_velocityX, position().y() + m_velocityY);
+    if(m_velocityX > std::fabs(0.1f))
+    {
+        setAnimation("running");
+    }
+
+    if(!isAlive())
+    {
+        m_speed = 0.0f;
+        m_deathCounter -= elapsedTime;
+        qDebug() << "deathCounter " << m_deathCounter;
+        //m_animator.changeState("die");
+        setAnimation("die");
+        if(m_deathCounter < 0.0f)
+        {
+            delete this;
+        }
+    }
     if(position().x() < 0.0f - GLOBAL::TILE_SIZE.width())
     {
         delete this;
@@ -148,11 +167,23 @@ void Goomba::createAnimation()
     m_animator.m_mapStates["running_f_"].push_back(m_texturePixmap.copy(TSW, TSH, TSW, TSH).scaled(TW, TH).transformed(QTransform().scale(-1,1)));
 
 
-    m_animator.m_mapStates["die"].push_back(m_texturePixmap.copy(0, TSH, TSW, TSH).scaled(TW, TH));
-    m_animator.m_mapStates["die_f_"].push_back(m_texturePixmap.copy(0, TSH, TSW, TSH).scaled(TW, TH).transformed(QTransform().scale(-1,1)));
+    m_animator.m_mapStates["die"].push_back(m_texturePixmap.copy(2*TSW, TSH, TSW, TSH).scaled(TW, TH));
+    m_animator.m_mapStates["die_f_"].push_back(m_texturePixmap.copy(2*TSW, TSH, TSW, TSH).scaled(TW, TH).transformed(QTransform().scale(-1,1)));
 
     m_animator.changeState("running");
     m_animator.m_timeBetweenFrames = 0.5f;
+}
+
+void Goomba::setAnimation(QString state)
+{
+    if(m_isRight)
+    {
+        m_animator.changeState(state);
+    }
+    else
+    {
+        m_animator.changeState(state+"_f_");
+    }
 }
 
 QRectF Goomba::hitBox()

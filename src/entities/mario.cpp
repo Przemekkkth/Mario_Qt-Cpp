@@ -2,6 +2,7 @@
 #include "block.h"
 #include "questionblock.h"
 #include "mushroom.h"
+#include "enemy.h"
 #include <QGraphicsPixmapItem>
 
 
@@ -106,6 +107,7 @@ void Mario::update(float elapsedTime)
     clampVelocities(elapsedTime);
     checkCollisionWithBlocks();
     checkCollisionWithMushrooms();
+    checkCollisionWithEnemies();
     setPosition(int(position().x() + m_velocityX), int(position().y() + m_velocityY));
 
     // Set Animation
@@ -314,6 +316,66 @@ void Mario::collideWithMushroom(Mushroom *mushroom)
     {
         mushroom->hit();
         setBig(true);
+    }
+}
+
+void Mario::checkCollisionWithEnemies()
+{
+    for(int i = 0; i < Enemy::ENEMIES.size(); ++i)
+    {
+        collideWithEnemy(Enemy::ENEMIES.at(i));
+    }
+}
+
+void Mario::collideWithEnemy(Enemy *enemy)
+{
+    // Calculate potential new position
+    float CollideX;
+    float CollideY;
+    float shrinkPixel = 5.f, shrinkFactor = 0.9f;//For one tile row, column to avoid block
+
+    //X-axis
+    if (m_velocityX <= 0.0f) // Moving Left
+    {
+        CollideX = position().x() + m_velocityX;
+        if(enemy->hitBox().contains(CollideX, position().y())
+                ||
+                enemy->hitBox().contains(CollideX, position().y()+hitBox().height()))
+        {
+        }
+    }
+    else // Moving Right
+    {
+        CollideX = position().x() + hitBox().width() + m_velocityX;
+        if(enemy->hitBox().contains(CollideX, position().y())
+                ||
+                enemy->hitBox().contains(CollideX, position().y()+hitBox().height()))
+        {
+        }
+    }
+    //Y-axis
+    if (m_velocityY < 0.0f) // Moving Up
+    {
+        CollideY = position().y() + m_velocityY;
+        if(enemy->hitBox().contains(position().x()+shrinkPixel, CollideY)
+                ||
+                enemy->hitBox().contains(position().x()+shrinkFactor*hitBox().width() , CollideY))
+        {
+        }
+    }
+    else if(m_velocityY > 1.f)// Moving Down
+    {
+        CollideY = position().y() + hitBox().height() + m_velocityY;
+        if(enemy->hitBox().contains(position().x()+shrinkPixel, CollideY)
+                ||
+                enemy->hitBox().contains(position().x()+shrinkFactor*hitBox().width() , CollideY))
+        {
+            qDebug() << m_velocityY;
+            if(enemy->isAlive())
+            {
+                enemy->setAlive(false);
+            }
+        }
     }
 }
 

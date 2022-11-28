@@ -5,6 +5,7 @@
 #include "../utils/animator.h"
 #include <QPixmap>
 
+class Enemy;
 class Block;
 class GameScene;
 class Mushroom;
@@ -30,6 +31,8 @@ private:
     void collideWithBlock(Block *block);
     void checkCollisionWithMushrooms();
     void collideWithMushroom(Mushroom *mushroom);
+    void checkCollisionWithEnemies();
+    void collideWithEnemy(Enemy* enemy);
     void setAnimatationState(QString state);
     void setFliped();
     void createAnimations();
