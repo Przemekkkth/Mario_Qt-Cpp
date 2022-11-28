@@ -5,6 +5,7 @@
 #include "entities/mario.h"
 #include "entities/questionblock.h"
 #include "entities/mushroom.h"
+#include "entities/enemy.h"
 
 GameScene::GameScene(QObject *parent)
     : QGraphicsScene(parent), m_loopSpeed(int(1000.0f/GLOBAL::FPS)),
@@ -55,7 +56,10 @@ void GameScene::loop()
         {
             Mushroom::MUSHROOMS.at(i)->update(elapsedTime);
         }
-
+        for(int i = 0; i < Enemy::ENEMIES.size(); ++i)
+        {
+            Enemy::ENEMIES.at(i)->update(elapsedTime);
+        }
 //draw
         clear();
         setBackgroundBrush(QBrush(QColor(0, 219, 255)));
@@ -65,6 +69,10 @@ void GameScene::loop()
         for(int i = 0; i < Mushroom::MUSHROOMS.size(); ++i)
         {
             Mushroom::MUSHROOMS.at(i)->draw(*this);
+        }
+        for(int i = 0; i < Enemy::ENEMIES.size(); ++i)
+        {
+            Enemy::ENEMIES.at(i)->draw(*this);
         }
         setSceneRect(getCameraX(*m_mario), 0, GLOBAL::SCREEN_SIZE.width(), GLOBAL::SCREEN_SIZE.height());
 //reset key/mouse status, reset frame counter

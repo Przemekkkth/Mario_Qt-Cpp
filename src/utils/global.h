@@ -58,6 +58,7 @@ static constexpr const QSize RESOLUTION_FACTOR = QSize(SCREEN_SIZE.width()/WINDO
 
 static constexpr const QSize TEXTURE_SIZE = QSize(16,16);
 static constexpr const QSize MARIO_TEXTURE_SIZE = QSize(18,18);
+static constexpr const QSize ENEMY_TEXTURE_SIZE = QSize(18,18);
 static constexpr const QSize TILE_SIZE = QSize(TEXTURE_SIZE.width() * RESOLUTION_FACTOR.width(), TEXTURE_SIZE.height() * RESOLUTION_FACTOR.height());
 
 static constexpr const float GRAVITY = 0.2f;
@@ -67,6 +68,7 @@ using Map = QVector<std::array<CELL_TYPE, SCREEN_SIZE.height() / TILE_SIZE.heigh
 //////////Layer z value
 static constexpr const int BG_LAYER = 0;
 static constexpr const int BLOCK_LAYER = 10;
+static constexpr const int ENEMY_LAYER = 15;
 static constexpr const int MARIO_LAYER = 20;
 static constexpr const int PARTICLE_LAYER = 30;
 }

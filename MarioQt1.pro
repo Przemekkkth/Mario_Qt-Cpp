@@ -2,7 +2,9 @@ greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
 HEADERS += \
     src/entities/block.h \
+    src/entities/enemy.h \
     src/entities/entity.h \
+    src/entities/goomba.h \
     src/entities/mario.h \
     src/entities/mushroom.h \
     src/entities/particle.h \
@@ -15,7 +17,9 @@ HEADERS += \
 
 SOURCES += \
     src/entities/block.cpp \
+    src/entities/enemy.cpp \
     src/entities/entity.cpp \
+    src/entities/goomba.cpp \
     src/entities/mario.cpp \
     src/entities/mushroom.cpp \
     src/entities/particle.cpp \

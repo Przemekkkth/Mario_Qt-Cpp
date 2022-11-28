@@ -3,6 +3,7 @@
 #include "../gamescene.h"
 #include "../entities/block.h"
 #include "../entities/questionblock.h"
+#include "../entities/enemy.h"
 
 const QMap<QRgb, QPoint> MapManager::colorToPointOfSpriteMap={
     {qRgb(146, 219, 0  ), QPoint(5 , 0 )},
@@ -51,6 +52,11 @@ const QMap<GLOBAL::CELL_TYPE, QPoint> MapManager::cellToPointOfSpriteMap=
 
 const QList<GLOBAL::CELL_TYPE> MapManager::animatedCells={
 
+};
+
+const QMap<QRgb, QString> MapManager::colorToEnemy=
+{
+{qRgb(182, 73 ,   0), "Goomba"                  }
 };
 
 MapManager::MapManager()
@@ -155,7 +161,7 @@ void MapManager::setMapSize(const int new_size)
 
 void MapManager::updateMapSketch(const int current_level)
 {
-    //m_mapSketch.load(":/res/LevelSketch" + QString::number(current_level) + ".png");
+    //m_mapSketch.load(":/res/LevelSketchTest34x45.png");
     m_mapSketch.load(":/res/LevelSketch0.png");
     //m_mapSketch.convertTo(QImage::Format_RGBA32FPx4);
     qDebug() << "format " << m_mapSketch.format();
@@ -192,6 +198,13 @@ void MapManager::convertFromSketch(int currentLevel)
                     setMapCell(a, b, MapManager::colorToCellMap[pixel]);
                 }
             }
+            else
+            {
+                if(MapManager::colorToEnemy.contains(pixel))
+                {
+                    Enemy::CreateEnemy(Enemy::Type::Goomba, QPointF(a*GLOBAL::TILE_SIZE.width(), (b - map_height)*GLOBAL::TILE_SIZE.height() ));
+                }
+            }
         }
     }
 
@@ -222,6 +235,7 @@ void MapManager::convertFromSketch(int currentLevel)
             }
         }
     }
+
 }
 
 void MapManager::printMap()

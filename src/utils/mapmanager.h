@@ -11,6 +11,7 @@ class MapManager
 public:
     static const QMap<QRgb, GLOBAL::CELL_TYPE> colorToCellMap;
     static const QMap<GLOBAL::CELL_TYPE, QPoint> cellToPointOfSpriteMap;
+    static const QMap<QRgb, QString> colorToEnemy;
     MapManager();
 
     int getMapSketchHeight() const;
