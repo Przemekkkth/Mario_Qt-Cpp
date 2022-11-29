@@ -1,4 +1,5 @@
 #include "block.h"
+#include "questionblock.h"
 #include "../utils/mapmanager.h"
 #include <QMap>
 #include <QGraphicsPixmapItem>
@@ -17,15 +18,29 @@ Block::~Block()
 
 void Block::CreateBlock(GLOBAL::CELL_TYPE cType, QPointF mapPosition)
 {
-    Block* block = new Block();
-    block->setCellType(cType);
-    QPoint spritePosition = MapManager::cellToPointOfSpriteMap.value(cType);
-    block->setPixmap(
-         QPixmap(":/res/map16x16.png").copy(spritePosition.x() * GLOBAL::TEXTURE_SIZE.width(),
-                                            spritePosition.y() * GLOBAL::TEXTURE_SIZE.height(),
-                                            GLOBAL::TEXTURE_SIZE.width(),
-                                            GLOBAL::TEXTURE_SIZE.height()).scaled(GLOBAL::TILE_SIZE.width(), GLOBAL::TILE_SIZE.height()));
-    block->setPosition(mapPosition);
+    if(cType == GLOBAL::QuestionBlock0 || cType == GLOBAL::QuestionBlock0M)
+    {
+        if(cType == GLOBAL::QuestionBlock0M)
+        {
+            QuestionBlock::CreateQuestionBlock(mapPosition, QuestionBlock::Type::PowerSupply);
+        }
+        else
+        {
+            QuestionBlock::CreateQuestionBlock(mapPosition);
+        }
+    }
+    else
+    {
+        Block* block = new Block();
+        block->setCellType(cType);
+        QPoint spritePosition = MapManager::cellToPointOfSpriteMap.value(cType);
+        block->setPixmap(
+                    QPixmap(":/res/map16x16.png").copy(spritePosition.x() * GLOBAL::TEXTURE_SIZE.width(),
+                                                       spritePosition.y() * GLOBAL::TEXTURE_SIZE.height(),
+                                                       GLOBAL::TEXTURE_SIZE.width(),
+                                                       GLOBAL::TEXTURE_SIZE.height()).scaled(GLOBAL::TILE_SIZE.width(), GLOBAL::TILE_SIZE.height()));
+        block->setPosition(mapPosition);
+    }
 }
 
 void Block::UpdateBlocks(float elapsedTime)

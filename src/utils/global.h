@@ -11,7 +11,7 @@ static constexpr int FRAME_TIME_INT = int(FRAME_TIME);
 
 enum CELL_TYPE{
     Empty,
-    Brick,
+    Brick0,
     Coin,
     TopLeftPipe0,
     LeftPipe0,
@@ -29,7 +29,7 @@ static QString cellTypeToString(CELL_TYPE t)
     {
         return QString("Empty");
     }
-    else if(t == Brick)
+    else if(t == Brick0)
     {
         return QString("Brick");
     }

@@ -25,7 +25,7 @@ const QMap<QRgb, QPoint> MapManager::colorToPointOfSpriteMap={
 
 const QMap<QRgb, GLOBAL::CELL_TYPE> MapManager::colorToCellMap=
 {
-    {qRgb(182, 73 ,   0), GLOBAL::CELL_TYPE::Brick                  },
+    {qRgb(182, 73 ,   0), GLOBAL::CELL_TYPE::Brick0                  },
     {qRgb(255, 255,   0), GLOBAL::CELL_TYPE::Coin                   },
     {qRgb(0  , 146,   0), GLOBAL::CELL_TYPE::TopLeftPipe0           },
     {qRgb(0  , 182,   0), GLOBAL::CELL_TYPE::LeftPipe0              },
@@ -39,13 +39,14 @@ const QMap<QRgb, GLOBAL::CELL_TYPE> MapManager::colorToCellMap=
 
 const QMap<GLOBAL::CELL_TYPE, QPoint> MapManager::cellToPointOfSpriteMap=
 {
-    {GLOBAL::CELL_TYPE::Brick,                  QPoint(0 , 0)},
+    {GLOBAL::CELL_TYPE::Brick0,                  QPoint(0 , 0)},
     {GLOBAL::CELL_TYPE::Coin,                   QPoint(-1,-1)},
     {GLOBAL::CELL_TYPE::TopLeftPipe0,           QPoint(10, 0)},
     {GLOBAL::CELL_TYPE::LeftPipe0,              QPoint(10, 1)},
     {GLOBAL::CELL_TYPE::TopRightPipe0,          QPoint(11, 0)},
     {GLOBAL::CELL_TYPE::RightPipe0,             QPoint(11, 1)},
     {GLOBAL::CELL_TYPE::QuestionBlock0,          QPoint(6 , 1)},
+    {GLOBAL::CELL_TYPE::QuestionBlock0M,          QPoint(6 , 1)},
     {GLOBAL::CELL_TYPE::Wall0,                  QPoint(2 , 0)},
     {GLOBAL::CELL_TYPE::Wall1,                  QPoint(3 , 0)}
 };
@@ -213,25 +214,9 @@ void MapManager::convertFromSketch(int currentLevel)
     {
         for(int y = 0; y < int(m_map.at(0).size()); ++y)
         {
-            if(cellToPointOfSpriteMap.contains(m_map[x][y]) && m_map[x][y] != GLOBAL::QuestionBlock0)
+            if(cellToPointOfSpriteMap.contains(m_map[x][y]))
             {
                 Block::CreateBlock(m_map[x][y], QPointF(x * GLOBAL::TILE_SIZE.width(), y * GLOBAL::TILE_SIZE.height()));
-            }
-        }
-    }
-
-    //Create Animated blocks
-    for(int x = 0; x < m_map.size(); ++x)
-    {
-        for(int y = 0; y < int(m_map.at(0).size()); ++y)
-        {
-            if(m_map[x][y] == GLOBAL::QuestionBlock0)
-            {
-                QuestionBlock::CreateQuestionBlock(QPointF(x * GLOBAL::TILE_SIZE.width(), y * GLOBAL::TILE_SIZE.height()));
-            }
-            else if(m_map[x][y] == GLOBAL::QuestionBlock0M)
-            {
-                QuestionBlock::CreateQuestionBlock(QPointF(x * GLOBAL::TILE_SIZE.width(), y * GLOBAL::TILE_SIZE.height()), QuestionBlock::Type::PowerSupply);
             }
         }
     }
