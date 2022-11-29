@@ -23,7 +23,7 @@ GameScene::GameScene(QObject *parent)
         m_keys[i] = new KeyStatus();
     }
     m_mouse = new MouseStatus();
-    setSceneRect(0,0, 640, 480);
+    setSceneRect(0,0, GLOBAL::SCREEN_SIZE.width(), GLOBAL::SCREEN_SIZE.height());
     connect(&m_timer, &QTimer::timeout, this, &GameScene::loop);
     m_timer.start(int(1000.0f/FPS));
     m_elapsedTimer.start();
@@ -83,18 +83,6 @@ void GameScene::loop()
 
 void GameScene::handlePlayerInput()
 {
-    if(m_mouse->m_released)
-    {
-        qDebug() << "m_mouse->m_released " << m_mouse->m_released;
-    }
-    if(m_keys[Qt::Key_A]->m_held)
-    {
-        m_x -= 10;
-    }
-    if(m_keys[Qt::Key_D]->m_held)
-    {
-        m_x += 10;
-    }
     if(m_keys[Qt::Key_R]->m_released)
     {
         resetGameScene();
