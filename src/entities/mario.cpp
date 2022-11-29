@@ -206,7 +206,17 @@ void Mario::update(float elapsedTime)
     checkCollisionWithMushrooms();
     checkCollisionWithEnemies();
     setPosition(int(position().x() + m_velocityX), int(position().y() + m_velocityY));
-
+    //Boundary
+    if(position().x() < 0.0f)
+    {
+        setX(0.0f);
+    }
+    if(position().y() > GLOBAL::SCREEN_SIZE.height()+2*GLOBAL::TILE_SIZE.height())
+    {
+        setY(GLOBAL::SCREEN_SIZE.height()+3*GLOBAL::TILE_SIZE.height());
+        setHurt();
+        setHurt();
+    }
     // Set Animation
     chooseAnimation();
 
