@@ -8,10 +8,11 @@
 
 Mario::Mario()
     : m_big(false), m_fliped(false), m_hurt(false), m_dead(false), m_velocityX(0.0f), m_velocityY(0.0f), m_elapsedTime(0.0f), m_onGround(false),
-      m_runMode(false), m_crouchning(false)
+      m_runMode(false), m_crouchning(false), m_collideWithBlock(true)
 {
     createAnimations();
     m_hurtTimer = HURT_TIMER;
+    m_deadTimer = DEAD_TIMER;
 }
 
 void Mario::createAnimations()
@@ -97,13 +98,27 @@ void Mario::jump(float jumpSpeed)
 
 void Mario::handleHurtCounter(float elapsedTime)
 {
-    if(m_hurt)
+    if(m_hurt && !m_dead)
     {
         m_hurtTimer -= elapsedTime;
         if(m_hurtTimer < 0.0f)
         {
             m_hurtTimer = HURT_TIMER;
             m_hurt = false;
+        }
+    }
+}
+
+void Mario::handleDeadCounter(float elapsedTime)
+{
+    if(m_dead && m_collideWithBlock)
+    {
+        m_deadTimer -= elapsedTime;
+        if(m_deadTimer < 0.0f)
+        {
+            jump(-0.75*JUMP_SPEED*elapsedTime);
+            m_deadTimer = DEAD_TIMER;
+            m_collideWithBlock = false;
         }
     }
 }
@@ -127,7 +142,7 @@ void Mario::draw(GameScene &scene)
     QGraphicsPixmapItem* pItem = new QGraphicsPixmapItem();
     pItem->setZValue(GLOBAL::MARIO_LAYER);
     pItem->setPos(int(position().x()), int(position().y()));
-    if(m_hurt)
+    if(m_hurt && !m_dead)
     {
         int val = m_hurtTimer*10;
         if(val%2)
@@ -184,7 +199,10 @@ void Mario::update(float elapsedTime)
         }
     }
     clampVelocities(elapsedTime);
-    checkCollisionWithBlocks();
+    if(m_collideWithBlock)
+    {
+        checkCollisionWithBlocks();
+    }
     checkCollisionWithMushrooms();
     checkCollisionWithEnemies();
     setPosition(int(position().x() + m_velocityX), int(position().y() + m_velocityY));
@@ -193,61 +211,66 @@ void Mario::update(float elapsedTime)
     chooseAnimation();
 
     handleHurtCounter(elapsedTime);
+    handleDeadCounter(elapsedTime);
 }
 
 void Mario::update(float elapsedTime, GameScene &scene)
 {
     m_elapsedTime = elapsedTime;
-    bool leftPressed = scene.keys(Qt::Key_A)->m_held;
-    bool rightPressed = scene.keys(Qt::Key_D)->m_held;
-    bool jumpPressed = scene.keys(Qt::Key_Z)->m_held;
-    bool crouchingPressed = scene.keys(Qt::Key_S)->m_held;
+    if(!m_dead)//isAlive
+    {
+        bool leftPressed = scene.keys(Qt::Key_A)->m_held;
+        bool rightPressed = scene.keys(Qt::Key_D)->m_held;
+        bool jumpPressed = scene.keys(Qt::Key_Z)->m_held;
+        bool crouchingPressed = scene.keys(Qt::Key_S)->m_held;
 
-    if(leftPressed)
-    {
-        //in air mario is less control(0.75) than on ground
-        if(m_runMode)
+        if(leftPressed)
         {
-            m_velocityX += (m_onGround ? -RUN_SPEED : -0.75f*RUN_SPEED) * elapsedTime;
+            //in air mario is less control(0.75) than on ground
+            if(m_runMode)
+            {
+                m_velocityX += (m_onGround ? -RUN_SPEED : -0.75f*RUN_SPEED) * elapsedTime;
+            }
+            else
+            {
+                m_velocityX += (m_onGround ? -MOVE_SPEED : -0.75*MOVE_SPEED) * elapsedTime;
+            }
+        }
+        if(rightPressed)
+        {
+            //in air mario is less control(0.75) than on ground
+            if(m_runMode)
+            {
+                m_velocityX += (m_onGround ? +RUN_SPEED : +0.75f*RUN_SPEED) * elapsedTime;
+            }
+            else
+            {
+                m_velocityX += (m_onGround ? +MOVE_SPEED : +0.75*MOVE_SPEED) * elapsedTime;
+            }
+        }
+        if(jumpPressed)
+        {
+            //m_velocityY < std::fabs(1.f) <= read value is before gravity works
+            if (m_onGround && !int(m_velocityY))
+            {
+                //m_velocityY = -JUMP_SPEED * elapsedTime;
+                jump(-JUMP_SPEED * elapsedTime);
+                //nDirModX = 1;
+            }
+        }
+        if(crouchingPressed)
+        {
+            if(!leftPressed && !rightPressed && m_big)
+            {
+                m_crouchning = true;
+            }
         }
         else
         {
-            m_velocityX += (m_onGround ? -MOVE_SPEED : -0.75*MOVE_SPEED) * elapsedTime;
+            m_crouchning = false;
         }
     }
-    if(rightPressed)
-    {
-        //in air mario is less control(0.75) than on ground
-        if(m_runMode)
-        {
-            m_velocityX += (m_onGround ? +RUN_SPEED : +0.75f*RUN_SPEED) * elapsedTime;
-        }
-        else
-        {
-            m_velocityX += (m_onGround ? +MOVE_SPEED : +0.75*MOVE_SPEED) * elapsedTime;
-        }
-    }
-    if(jumpPressed)
-    {
-        //m_velocityY < std::fabs(1.f) <= read value is before gravity works
-        if (m_onGround && !int(m_velocityY))
-        {
-            //m_velocityY = -JUMP_SPEED * elapsedTime;
-            jump(-JUMP_SPEED * elapsedTime);
-            //nDirModX = 1;
-        }
-    }
-    if(crouchingPressed)
-    {
-        if(!leftPressed && !rightPressed && m_big)
-        {
-            m_crouchning = true;
-        }
-    }
-    else
-    {
-        m_crouchning = false;
-    }
+
 
     update(elapsedTime);
     m_animator.update(elapsedTime);
@@ -269,16 +292,18 @@ bool Mario::isBig() const
 
 void Mario::resetStatus()
 {
-    m_big        = false;
-    m_fliped     = false;
-    m_velocityX  = 0.0f;
-    m_velocityY  = 0.0f;
-    m_onGround   = false;
-    m_runMode    = false;
-    m_crouchning = false;
-    m_hurt       = false;
-    m_dead       = false;
-    m_hurtTimer  = HURT_TIMER;
+    m_big              = false;
+    m_fliped           = false;
+    m_velocityX        = 0.0f;
+    m_velocityY        = 0.0f;
+    m_onGround         = false;
+    m_runMode          = false;
+    m_crouchning       = false;
+    m_hurt             = false;
+    m_dead             = false;
+    m_collideWithBlock = true;
+    m_hurtTimer        = HURT_TIMER;
+    m_deadTimer        = DEAD_TIMER;
     setPosition(0,0);
 }
 

@@ -19,6 +19,7 @@ public:
     static constexpr const float MAX_RUN_SPEED      = 12.0f;
     static constexpr const float MAX_FALLDOWN_SPEED = 350.0f;
     static constexpr const float HURT_TIMER         = 2.f;
+    static constexpr const float DEAD_TIMER         = 1.5f;
     Mario();
 public:
     virtual void draw(GameScene &scene) override;
@@ -41,6 +42,7 @@ private:
     void createAnimations();
     void jump(float jumpSpeed);
     void handleHurtCounter(float elapsedTime);
+    void handleDeadCounter(float elapsedTime);
     bool m_big, m_fliped, m_hurt, m_dead;
     void setHurt();
     QRectF hitBox();
@@ -48,8 +50,10 @@ private:
     float m_velocityX, m_velocityY;
     float m_elapsedTime;
     float m_hurtTimer;
+    float m_deadTimer;
     bool m_onGround, m_runMode;
     bool m_crouchning;
+    bool m_collideWithBlock;
     Animator m_animator;
 
 };
