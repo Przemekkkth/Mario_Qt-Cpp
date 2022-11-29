@@ -1,5 +1,6 @@
 #include "block.h"
 #include "questionblock.h"
+#include "brick.h"
 #include "../utils/mapmanager.h"
 #include <QMap>
 #include <QGraphicsPixmapItem>
@@ -28,6 +29,10 @@ void Block::CreateBlock(GLOBAL::CELL_TYPE cType, QPointF mapPosition)
         {
             QuestionBlock::CreateQuestionBlock(mapPosition);
         }
+    }
+    else if(cType == GLOBAL::Brick0)
+    {
+        Brick::createBrick(mapPosition);
     }
     else
     {

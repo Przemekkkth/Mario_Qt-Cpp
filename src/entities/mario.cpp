@@ -1,6 +1,7 @@
 #include "mario.h"
 #include "block.h"
 #include "questionblock.h"
+#include "brick.h"
 #include "mushroom.h"
 #include "enemy.h"
 #include <QGraphicsPixmapItem>
@@ -393,7 +394,17 @@ void Mario::collideWithBlock(Block* block)
                     questionBlock->deactivate();
                 }
             }
+            Brick* brick = dynamic_cast<Brick*>(block);
+            if(brick)
+            {
+                if(isBig())
+                {
+                    brick->destroy();
+                }
+
+            }
             m_velocityY = 0.1f;
+
         }
     }
     else // Moving Down
@@ -538,7 +549,14 @@ void Mario::checkCollisionWithBlocks()
 
     for(int i = 0; i < Block::BLOCKS.size(); ++i)
     {
-
+        Brick* brick = dynamic_cast<Brick*>(Block::BLOCKS.at(i));
+        if(brick)
+        {
+            if(brick->isDestroyed())
+            {
+                continue;
+            }
+        }
         collideWithBlock(Block::BLOCKS.at(i));
     }
 }

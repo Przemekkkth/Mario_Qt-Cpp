@@ -12,12 +12,16 @@ public:
     virtual void update(float elapsedTime) override;
 
     void setAnimator(Animator animator);
+    Animator animator() const;
     void setMinYValue(float y);
+    void setMaxYValue(float y);
+    void setVerticalSpeed(float newVerticalSpeed);
+    float verticalSpeed() const;
     bool isAlive();
 private:
     float m_horizontalSpeed;
     float m_verticalSpeed;
-    float m_minYValue;
+    float m_minYValue, m_maxYValue;
     bool m_alive;
     Animator m_animator;
 };
