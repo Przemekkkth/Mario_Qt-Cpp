@@ -12,6 +12,7 @@ Mario::Mario()
       m_runMode(false), m_crouchning(false), m_collideWithBlock(true)
 {
     createAnimations();
+    setMaxX(20000);
     m_hurtTimer = HURT_TIMER;
     m_deadTimer = DEAD_TIMER;
 }
@@ -218,6 +219,10 @@ void Mario::update(float elapsedTime)
         setHurt();
         setHurt();
     }
+    if(position().x() > m_maxX - GLOBAL::TILE_SIZE.width())
+    {
+        setX(m_maxX - GLOBAL::TILE_SIZE.width());
+    }
     // Set Animation
     chooseAnimation();
 
@@ -321,6 +326,11 @@ void Mario::resetStatus()
     m_hurtTimer        = HURT_TIMER;
     m_deadTimer        = DEAD_TIMER;
     setPosition(0,0);
+}
+
+void Mario::setMaxX(int maxX)
+{
+    m_maxX = maxX;
 }
 
 void Mario::clampVelocities(float elapsedTime)

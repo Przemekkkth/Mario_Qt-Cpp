@@ -28,6 +28,7 @@ public:
     void setBig(bool on);
     bool isBig() const;
     void resetStatus();
+    void setMaxX(int maxX);
 private:
     void clampVelocities(float elapsedTime);
     void checkCollisionWithBlocks();
@@ -55,6 +56,7 @@ private:
     bool m_crouchning;
     bool m_collideWithBlock;
     Animator m_animator;
+    float m_maxX;
 
 };
 

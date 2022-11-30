@@ -8,13 +8,15 @@
 #include "entities/enemy.h"
 
 GameScene::GameScene(QObject *parent)
-    : QGraphicsScene(parent), m_loopSpeed(int(1000.0f/GLOBAL::FPS)),
-      m_x(0)
+    : QGraphicsScene(parent), m_mostRightX(200000),
+      m_loopSpeed(int(1000.0f/GLOBAL::FPS)), m_x(0)
 {
 
     m_mapManager.updateMapSketch(0);
     m_mapManager.convertFromSketch(0);
+    m_mostRightX = float(m_mapManager.getMapSketchWidth()*GLOBAL::TILE_SIZE.width()-GLOBAL::SCREEN_SIZE.width());
     m_mario = new Mario();
+    m_mario->setMaxX(m_mostRightX+GLOBAL::SCREEN_SIZE.width());
     for(int i = 0; i < 256; ++i)
     {
         m_keys[i] = new KeyStatus();
@@ -60,8 +62,9 @@ void GameScene::loop()
 //draw
         clear();
         setBackgroundBrush(QBrush(QColor(0, 219, 255)));
-        m_mapManager.drawBackground(getCameraX(*m_mario), *this);
-        m_mapManager.drawForeground(getCameraX(*m_mario), *this);
+        float cameraPosX = std::clamp(getCameraX(*m_mario), 0.0f, m_mostRightX);
+        m_mapManager.drawBackground(cameraPosX, *this);
+        m_mapManager.drawForeground(cameraPosX, *this);
         m_mario->draw(*this);
         for(int i = 0; i < Mushroom::MUSHROOMS.size(); ++i)
         {
@@ -71,7 +74,7 @@ void GameScene::loop()
         {
             Enemy::ENEMIES.at(i)->draw(*this);
         }
-        setSceneRect(getCameraX(*m_mario), 0, GLOBAL::SCREEN_SIZE.width(), GLOBAL::SCREEN_SIZE.height());
+        setSceneRect(cameraPosX, 0, GLOBAL::SCREEN_SIZE.width(), GLOBAL::SCREEN_SIZE.height());
 //reset key/mouse status, reset frame counter
         resetKeyStatus();
         m_loopTime -= m_loopSpeed;
@@ -112,7 +115,6 @@ float GameScene::getCameraX(const Mario &mario)
     }
     else
     {
-        //return QPointF(GLOBAL::SCREEN_SIZE.width()/2-GLOBAL::TILE_SIZE.width(), marioPos.y());
         return mario.position().x() - GLOBAL::SCREEN_SIZE.width()/2;
     }
 }
