@@ -37,6 +37,7 @@ private:
     void handlePlayerInput();
     void resetKeyStatus();
     void resetGameScene();
+    void renderGameScene();
     float getCameraX(const Mario& mario);
     float m_mostRightX;
     KeyStatus* m_keys[256];

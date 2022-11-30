@@ -2,10 +2,13 @@
 #include <QKeyEvent>
 #include <QGraphicsSceneMouseEvent>
 #include <QDebug>
+#include <QPainter>
+#include <QDir>
 #include "entities/mario.h"
 #include "entities/questionblock.h"
 #include "entities/mushroom.h"
 #include "entities/enemy.h"
+
 
 GameScene::GameScene(QObject *parent)
     : QGraphicsScene(parent), m_mostRightX(200000),
@@ -87,6 +90,10 @@ void GameScene::handlePlayerInput()
     {
         resetGameScene();
     }
+    if(m_keys[GLOBAL::Z_KEY]->m_released)
+    {
+        //renderGameScene();//uncomment if you want to make screenshots
+    }
 }
 
 void GameScene::resetKeyStatus()
@@ -106,6 +113,19 @@ void GameScene::resetGameScene()
     m_mapManager.updateMapSketch(0);
     m_mapManager.convertFromSketch(0);
     m_mario->resetStatus();
+}
+
+void GameScene::renderGameScene()
+{
+    static int index = 0;
+    QString fileName = QDir::currentPath() + QDir::separator() + "screen" + QString::number(index++) + ".png";
+    QRect rect = sceneRect().toAlignedRect();
+    QImage image(rect.size(), QImage::Format_ARGB32);
+    image.fill(Qt::transparent);
+    QPainter painter(&image);
+    render(&painter);
+    image.save(fileName);
+    qDebug() << "saved " << fileName;
 }
 
 float GameScene::getCameraX(const Mario &mario)
