@@ -12,7 +12,7 @@
 
 GameScene::GameScene(QObject *parent)
     : QGraphicsScene(parent), m_mostRightX(200000),
-      m_loopSpeed(int(1000.0f/GLOBAL::FPS)), m_x(0)
+      m_loopSpeed(int(1000.0f/GLOBAL::FPS))
 {
 
     m_mapManager.updateMapSketch(0);

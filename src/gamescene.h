@@ -50,7 +50,6 @@ private:
     const float m_loopSpeed;
 
     MapManager m_mapManager;
-    int m_x;
     Mario *m_mario;
     // QGraphicsScene interface
 protected:
