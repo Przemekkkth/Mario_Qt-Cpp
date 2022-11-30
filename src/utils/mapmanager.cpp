@@ -51,10 +51,6 @@ const QMap<GLOBAL::CELL_TYPE, QPoint> MapManager::cellToPointOfSpriteMap=
     {GLOBAL::CELL_TYPE::Wall1,                  QPoint(3 , 0)}
 };
 
-const QList<GLOBAL::CELL_TYPE> MapManager::animatedCells={
-
-};
-
 const QMap<QRgb, QString> MapManager::colorToEnemy=
 {
 {qRgb(182, 73 ,   0), "Goomba"                  }
@@ -94,11 +90,6 @@ void MapManager::drawBackground(int cameraX, GameScene &scene)
         {
             unsigned short sprite_x = 0;
             unsigned short sprite_y = 0;
-
-
-            //This code is a big mess.
-            //But it works.
-            //Keep that in mind before judging me.
 
             QColor pixel = m_mapSketch.pixelColor(a, b + 2 * map_height);
             QRgb pixelRGB = m_mapSketch.pixel(a, b + 2 * map_height);
@@ -178,10 +169,8 @@ void MapManager::convertFromSketch(int currentLevel)
     updateMapSketch(currentLevel);
     setMapSize(getMapSketchWidth());
 
-    //We divide the height by 3 because the sketch stores the level as 3 layers: blocks, entities, and background tiles.
+    //3 layers: blocks, entities, and background tiles.
     map_height = floor(getMapSketchHeight() / 3.f);
-
-    //i_background_color = mapManager.getMapSketchPixel(0, mapManager.getMapSketchHeight() - 1);
 
     for (unsigned short a = 0; a < getMapSketchWidth(); a++)
     {

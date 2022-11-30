@@ -13,17 +13,13 @@ public:
     void setPixmap(const QPixmap& pixmap);
     QPixmap pixmap() const;
     QRectF hitBox();
-
     void setCellType(GLOBAL::CELL_TYPE cellType);
     GLOBAL::CELL_TYPE cellType() const;
+    virtual void draw(GameScene &scene) override;
+    virtual void update(float elapsedTime) override;
 private:
     GLOBAL::CELL_TYPE m_cellType;
     QPixmap m_pixmap;
-
-    // Entity interface
-public:
-    virtual void draw(GameScene &scene) override;
-    virtual void update(float elapsedTime) override;
 };
 
 #endif // BLOCK_H

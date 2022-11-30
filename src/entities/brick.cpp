@@ -114,7 +114,6 @@ void Brick::update(float elapsedTime)
 void Brick::destroy()
 {
     m_isDestroyed = true;
-    //setPosition(position().x(), position().y()-5);
 }
 
 bool Brick::isDestroyed() const

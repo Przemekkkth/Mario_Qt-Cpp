@@ -37,7 +37,5 @@ private:
 
     GLOBAL::Map m_map;
     static const QMap<QRgb, QPoint> colorToPointOfSpriteMap;
-
-    static const QList<GLOBAL::CELL_TYPE> animatedCells;
 };
 #endif // MAPMANAGER_H
