@@ -126,7 +126,7 @@ void QuestionBlock::setType(Type type)
 
 void QuestionBlock::createCoinAnimation()
 {
-    m_coinTexturePixmap.load(":/res/coin.png");
+    m_coinTexturePixmap.load(":/res/coin16x16.png");
     //0 0 10frames
     float TW = GLOBAL::TEXTURE_SIZE.width();
     float TH = GLOBAL::TEXTURE_SIZE.height();

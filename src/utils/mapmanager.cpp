@@ -155,7 +155,7 @@ void MapManager::setMapSize(const int new_size)
 
 void MapManager::updateMapSketch(const int current_level)
 {
-    m_mapSketch.load(":/res/LevelSketch0.png");
+    m_mapSketch.load("://res/sketch_world1-1.png");
 }
 
 QRgb MapManager::getMapSketchPixel(const int x, const int y) const
