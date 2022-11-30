@@ -20,7 +20,9 @@ const QMap<QRgb, QPoint> MapManager::colorToPointOfSpriteMap={
     {qRgb(235, 235, 235), QPoint(9 , 0 )},
     {qRgb(225, 225, 225), QPoint(7 , 1 )},
     {qRgb(215, 215, 215), QPoint(8 , 1 )},
-    {qRgb(205, 205, 205), QPoint(9 , 1 )}
+    {qRgb(205, 205, 205), QPoint(9 , 1 )},
+    {qRgb(255, 73 ,  85), QPoint(12, 1 )},
+    {qRgb(167, 37 ,  45), QPoint(12, 0 )}
 };
 
 const QMap<QRgb, GLOBAL::CELL_TYPE> MapManager::colorToCellMap=
@@ -153,7 +155,6 @@ void MapManager::setMapSize(const int new_size)
 
 void MapManager::updateMapSketch(const int current_level)
 {
-    //m_mapSketch.load(":/res/LevelSketchTest34x45.png");
     m_mapSketch.load(":/res/LevelSketch0.png");
 }
 

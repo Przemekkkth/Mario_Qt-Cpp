@@ -35,7 +35,7 @@ private slots:
 
 private:
     void handlePlayerInput();
-    void resetStatus();
+    void resetKeyStatus();
     void resetGameScene();
     float getCameraX(const Mario& mario);
     KeyStatus* m_keys[256];

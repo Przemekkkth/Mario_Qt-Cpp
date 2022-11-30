@@ -14,9 +14,6 @@ GameScene::GameScene(QObject *parent)
 
     m_mapManager.updateMapSketch(0);
     m_mapManager.convertFromSketch(0);
-    //m_mapManager.drawForeground(0, *this);
-    //exit(0);
-    //m_mapManager.printMap();
     m_mario = new Mario();
     for(int i = 0; i < 256; ++i)
     {
@@ -76,7 +73,7 @@ void GameScene::loop()
         }
         setSceneRect(getCameraX(*m_mario), 0, GLOBAL::SCREEN_SIZE.width(), GLOBAL::SCREEN_SIZE.height());
 //reset key/mouse status, reset frame counter
-        resetStatus();
+        resetKeyStatus();
         m_loopTime -= m_loopSpeed;
     }
 }
@@ -89,9 +86,9 @@ void GameScene::handlePlayerInput()
     }
 }
 
-void GameScene::resetStatus()
+void GameScene::resetKeyStatus()
 {
-    for(int i = 0; i < 256; ++i)
+    for(int i = 0; i < GLOBAL::COUNT_OF_KEYS; ++i)
     {
         m_keys[i]->m_released = false;
     }
