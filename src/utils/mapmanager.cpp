@@ -164,8 +164,6 @@ void MapManager::updateMapSketch(const int current_level)
 {
     //m_mapSketch.load(":/res/LevelSketchTest34x45.png");
     m_mapSketch.load(":/res/LevelSketch0.png");
-    //m_mapSketch.convertTo(QImage::Format_RGBA32FPx4);
-    qDebug() << "format " << m_mapSketch.format();
 }
 
 QRgb MapManager::getMapSketchPixel(const int x, const int y) const

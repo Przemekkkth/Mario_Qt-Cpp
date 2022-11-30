@@ -22,7 +22,6 @@ Mushroom::Mushroom(float x, float y)
 
 Mushroom::~Mushroom()
 {
-    qDebug() << "Deleted";
     MUSHROOMS.removeOne(this);
 }
 
@@ -111,7 +110,6 @@ void Mushroom::collideWithBlock(Block* block)
         CollideX = position().x() + m_velocityX;
         if(block->hitBox().contains(int(CollideX), position().y()+hitBox().height()/2))
         {
-            qDebug() << "Left";
             setDirection(!m_isRight);
         }
     }
@@ -120,7 +118,6 @@ void Mushroom::collideWithBlock(Block* block)
         CollideX = position().x() + hitBox().width() + m_velocityX;
         if(block->hitBox().contains(int(CollideX), position().y()+hitBox().height()/2))
         {
-            qDebug() << "Right";
             setDirection(!m_isRight);
         }
     }

@@ -13,7 +13,6 @@ Goomba::Goomba(float x, float y)
 
 Goomba::~Goomba()
 {
-    qDebug() << "~Goomba";
 }
 
 void Goomba::draw(GameScene &scene)
@@ -42,8 +41,6 @@ void Goomba::update(float elapsedTime)
     {
         m_speed = 0.0f;
         m_deathCounter -= elapsedTime;
-        qDebug() << "deathCounter " << m_deathCounter;
-        //m_animator.changeState("die");
         setAnimation("die");
         if(m_deathCounter < 0.0f)
         {
@@ -150,10 +147,8 @@ void Goomba::collideWithEnemy(Enemy *enemy)
 
 void Goomba::createAnimation()
 {
-    if(!m_texturePixmap.load(":/res/enemies_18x18.png"))
-    {
-        qDebug() << "Not loaded => :/res/enemies_18x18.png";
-    }
+    m_texturePixmap.load(":/res/enemies_18x18.png");
+
     float TSW = GLOBAL::ENEMY_TEXTURE_SIZE.width();
     float TSH = GLOBAL::ENEMY_TEXTURE_SIZE.height();
     float TW  = GLOBAL::TILE_SIZE.width();
