@@ -1,6 +1,8 @@
 #ifndef GLOBAL_H
 #define GLOBAL_H
 #include <QSize>
+#include <QMap>
+#include <QtGlobal>
 
 namespace GLOBAL
 {
@@ -73,6 +75,38 @@ static constexpr const int BLOCK_LAYER    = 10;
 static constexpr const int ENEMY_LAYER    = 15;
 static constexpr const int MARIO_LAYER    = 20;
 static constexpr const int PARTICLE_LAYER = 30;
+//////////Keys
+static constexpr const int LEFT_ARROW_KEY  = 0;
+static constexpr const int RIGHT_ARROW_KEY = 1;
+static constexpr const int UP_ARROW_KEY    = 2;
+static constexpr const int DOWN_ARROW_KEY  = 3;
+
+static constexpr const int A_KEY           = 4;
+static constexpr const int D_KEY           = 5;
+static constexpr const int W_KEY           = 6;
+static constexpr const int S_KEY           = 7;
+static constexpr const int SPACE_KEY       = 8;
+
+static constexpr const int ENTER_KEY       = 9;
+static constexpr const int R_KEY           = 10;
+
+static constexpr const int COUNT_OF_KEYS   = 11;
+
+static const QMap<int, int> KeysMapper =
+{
+    {static_cast<int>(Qt::Key_Left),  LEFT_ARROW_KEY},
+    {static_cast<int>(Qt::Key_Right), RIGHT_ARROW_KEY},
+    {static_cast<int>(Qt::Key_Up),    UP_ARROW_KEY},
+    {static_cast<int>(Qt::Key_Down),  DOWN_ARROW_KEY},
+    {static_cast<int>(Qt::Key_A),     A_KEY},
+    {static_cast<int>(Qt::Key_D),     D_KEY},
+    {static_cast<int>(Qt::Key_W),     W_KEY},
+    {static_cast<int>(Qt::Key_S),     S_KEY},
+    {static_cast<int>(Qt::Key_Space), SPACE_KEY},
+    {static_cast<int>(Qt::Key_Enter), ENTER_KEY},
+    {static_cast<int>(Qt::Key_Return),ENTER_KEY},
+    {static_cast<int>(Qt::Key_R),     R_KEY}
+};
 }
 
 #endif // GLOBAL_H

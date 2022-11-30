@@ -83,7 +83,7 @@ void GameScene::loop()
 
 void GameScene::handlePlayerInput()
 {
-    if(m_keys[Qt::Key_R]->m_released)
+    if(m_keys[GLOBAL::R_KEY]->m_released || m_keys[GLOBAL::ENTER_KEY]->m_released)
     {
         resetGameScene();
     }
@@ -122,14 +122,20 @@ float GameScene::getCameraX(const Mario &mario)
 
 void GameScene::keyPressEvent(QKeyEvent *event)
 {
-    m_keys[event->key()]->m_held = true;
+    if(GLOBAL::KeysMapper.contains(event->key()))
+    {
+        m_keys[GLOBAL::KeysMapper[event->key()]]->m_held = true;
+    }
     QGraphicsScene::keyPressEvent(event);
 }
 
 void GameScene::keyReleaseEvent(QKeyEvent *event)
 {
-    m_keys[event->key()]->m_held = false;
-    m_keys[event->key()]->m_released = true;
+    if(GLOBAL::KeysMapper.contains(event->key()))
+    {
+        m_keys[GLOBAL::KeysMapper[event->key()]]->m_held = false;
+        m_keys[GLOBAL::KeysMapper[event->key()]]->m_released = true;
+    }
     QGraphicsScene::keyReleaseEvent(event);
 }
 

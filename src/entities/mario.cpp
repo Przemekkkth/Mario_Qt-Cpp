@@ -230,10 +230,15 @@ void Mario::update(float elapsedTime, GameScene &scene)
     m_elapsedTime = elapsedTime;
     if(!m_dead)//isAlive
     {
-        bool leftPressed = scene.keys(Qt::Key_A)->m_held;
-        bool rightPressed = scene.keys(Qt::Key_D)->m_held;
-        bool jumpPressed = scene.keys(Qt::Key_Z)->m_held;
-        bool crouchingPressed = scene.keys(Qt::Key_S)->m_held;
+        bool leftPressed =      scene.keys(GLOBAL::A_KEY)->m_held ||
+                                scene.keys(GLOBAL::LEFT_ARROW_KEY)->m_held;
+        bool rightPressed =     scene.keys(GLOBAL::D_KEY)->m_held ||
+                                scene.keys(GLOBAL::RIGHT_ARROW_KEY)->m_held;
+        bool jumpPressed =      scene.keys(GLOBAL::W_KEY)->m_held ||
+                                scene.keys(GLOBAL::UP_ARROW_KEY)->m_held ||
+                                scene.keys(GLOBAL::SPACE_KEY)->m_held;
+        bool crouchingPressed = scene.keys(GLOBAL::S_KEY)->m_held ||
+                                scene.keys(GLOBAL::DOWN_ARROW_KEY)->m_held;
 
         if(leftPressed)
         {
