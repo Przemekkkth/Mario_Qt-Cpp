@@ -576,7 +576,7 @@ void Mario::checkCollisionWithBlocks()
     }
 }
 
-QRectF Mario::hitBox()
+QRect Mario::hitBox()
 {
     float height;
     float y = position().y();
@@ -592,5 +592,5 @@ QRectF Mario::hitBox()
     {
         y -= GLOBAL::TILE_SIZE.height();
     }
-    return QRectF(position().x(), y, GLOBAL::TILE_SIZE.width(), height);
+    return QRect(position().x(), y, GLOBAL::TILE_SIZE.width(), height);
 }

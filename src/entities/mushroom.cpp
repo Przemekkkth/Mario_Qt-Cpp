@@ -78,9 +78,9 @@ int Mushroom::direction() const
     }
 }
 
-QRectF Mushroom::hitBox()
+QRect Mushroom::hitBox()
 {
-    return QRectF(position().x(), position().y(), GLOBAL::TILE_SIZE.width(), GLOBAL::TILE_SIZE.height());
+    return QRect(position().x(), position().y(), GLOBAL::TILE_SIZE.width(), GLOBAL::TILE_SIZE.height());
 }
 
 void Mushroom::hit()

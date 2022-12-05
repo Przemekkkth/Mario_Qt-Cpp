@@ -12,7 +12,7 @@ public:
     static void UpdateBlocks(float elapsedTime);
     void setPixmap(const QPixmap& pixmap);
     QPixmap pixmap() const;
-    QRectF hitBox();
+    QRect hitBox();
     void setCellType(GLOBAL::CELL_TYPE cellType);
     GLOBAL::CELL_TYPE cellType() const;
     virtual void draw(GameScene &scene) override;

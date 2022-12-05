@@ -22,7 +22,7 @@ public:
     void setType(Type type);
     void setDirection(bool isRight);
     int direction() const;
-    QRectF hitBox();
+    QRect hitBox();
     void hit();
 private:
     void createAnimation();

@@ -181,9 +181,9 @@ void Goomba::setAnimation(QString state)
     }
 }
 
-QRectF Goomba::hitBox()
+QRect Goomba::hitBox()
 {
-    return QRectF(position().x(), position().y(), GLOBAL::TILE_SIZE.width(), GLOBAL::TILE_SIZE.height());
+    return QRect(position().x(), position().y(), GLOBAL::TILE_SIZE.width(), GLOBAL::TILE_SIZE.height());
 }
 
 void Goomba::setDirection(bool isRight)

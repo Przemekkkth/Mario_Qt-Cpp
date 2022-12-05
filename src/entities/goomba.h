@@ -22,7 +22,7 @@ public:
 private:
     void createAnimation();
     void setAnimation(QString state);
-    virtual QRectF hitBox() override;
+    virtual QRect hitBox() override;
     void setDirection(bool isRight);
     int direction() const;
 

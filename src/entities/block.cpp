@@ -66,9 +66,9 @@ QPixmap Block::pixmap() const
     return m_pixmap;
 }
 
-QRectF Block::hitBox()
+QRect Block::hitBox()
 {
-    return QRectF(position().x(), position().y(),
+    return QRect(position().x(), position().y(),
                   GLOBAL::TILE_SIZE.width(), GLOBAL::TILE_SIZE.height());
 }
 
