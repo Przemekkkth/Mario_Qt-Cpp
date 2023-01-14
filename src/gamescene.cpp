@@ -4,6 +4,7 @@
 #include <QDebug>
 #include <QPainter>
 #include <QDir>
+#include <QGraphicsRectItem>
 #include "entities/mario.h"
 #include "entities/questionblock.h"
 #include "entities/mushroom.h"
@@ -43,7 +44,7 @@ void GameScene::loop()
     m_elapsedTimer.restart();
 
     m_loopTime += m_deltaTime;
-    if( m_loopTime > m_loopSpeed)
+    while( m_loopTime > m_loopSpeed)
     {
         const float elapsedTime = 1.0f/FPS;
 //input
@@ -64,8 +65,14 @@ void GameScene::loop()
         }
 //draw
         clear();
-        setBackgroundBrush(QBrush(QColor(0, 219, 255)));
+        setBackgroundBrush(QBrush(QColor(Qt::black)));
         float cameraPosX = std::clamp(getCameraX(*m_mario), 0.0f, m_mostRightX);
+        QGraphicsRectItem* bgRect = new QGraphicsRectItem();
+        bgRect->setRect(0,0, GLOBAL::SCREEN_SIZE.width(), GLOBAL::SCREEN_SIZE.height());
+        bgRect->setPos(cameraPosX, 0);
+        bgRect->setPen(QColor(0, 219, 255));
+        bgRect->setBrush(QColor(0, 219, 255));
+        addItem(bgRect);
         m_mapManager.drawBackground(cameraPosX, *this);
         m_mapManager.drawForeground(cameraPosX, *this);
         m_mario->draw(*this);
@@ -78,7 +85,23 @@ void GameScene::loop()
             Enemy::ENEMIES.at(i)->draw(*this);
         }
         setSceneRect(cameraPosX, 0, GLOBAL::SCREEN_SIZE.width(), GLOBAL::SCREEN_SIZE.height());
-//reset key/mouse status, reset frame counter
+        //Add boundary
+        QGraphicsRectItem* lRect = new QGraphicsRectItem();
+        lRect->setPen(QColor(Qt::black));
+        lRect->setBrush(QColor(Qt::black));
+        lRect->setRect(0,0, GLOBAL::SCREEN_SIZE.width(), GLOBAL::SCREEN_SIZE.height());
+        lRect->setPos(sceneRect().x()-GLOBAL::SCREEN_SIZE.width(), 0);
+        lRect->setZValue(1000);
+        addItem(lRect);
+        QGraphicsRectItem* rRect = new QGraphicsRectItem();
+        rRect->setPen(QColor(Qt::black));
+        rRect->setBrush(QColor(Qt::black));
+        rRect->setRect(0,0, GLOBAL::SCREEN_SIZE.width(), GLOBAL::SCREEN_SIZE.height());
+        rRect->setPos(sceneRect().x()+GLOBAL::SCREEN_SIZE.width(), 0);
+        rRect->setZValue(1000);
+        addItem(rRect);
+
+        //reset key/mouse status, reset frame counter
         resetKeyStatus();
         m_loopTime -= m_loopSpeed;
     }
