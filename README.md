@@ -20,3 +20,4 @@ qmake && make
 * [Qt](https://www.qt.io/) - Cross-Platform software for embedded & desktop
 * [Assets](https://webfussel.itch.io/more-bit-8-bit-mario) - source of assets
 * [yt](https://youtu.be/dTcI_2RDFL4) - gameplay
+* [Play online](https://przemekkkth.github.io/marioqt/index.html) - game hosted on GitHub
